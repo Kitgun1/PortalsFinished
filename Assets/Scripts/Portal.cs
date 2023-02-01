@@ -7,7 +7,7 @@ public class Portal : MonoBehaviour
 
     private void Start()
     {
-        Other.PortalView.targetTexture = new RenderTexture(Screen.width, Screen.height, 24);
+        Other.PortalView.targetTexture = new RenderTexture(Screen.width / 2, Screen.height / 2, 24);
         GetComponentInChildren<MeshRenderer>().sharedMaterial.mainTexture = Other.PortalView.targetTexture;
     }
     

@@ -51,6 +51,7 @@ public class PlayerControls : MonoBehaviour, ITeleportable
 
     void Update()
     {
+        rotateSpeed = PlayerPrefs.GetFloat("PlayerSensitivity", 10);
         transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
 
         playerCamera.Rotate(-Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
