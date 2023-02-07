@@ -31,12 +31,19 @@ public class Teleporter : MonoBehaviour
         obj.position = Other.transform.localToWorldMatrix.MultiplyPoint3x4(localPos);
 
         Rigidbody ct = obj.GetComponent<Rigidbody>();
-        ct.AddForce(Other.TeleportPoint.transform.forward * Mathf.Abs(ct.velocity.y) * obj.GetComponent<PlayerControls>().forceout, ForceMode.Impulse);
-        Debug.Log(ct.velocity.magnitude);
+        float forceOut = Mathf.Abs(ct.velocity.y) < 3f ? 1f : obj.GetComponent<PlayerControls>().forceout;
+        Vector3 directionForce = Other.TeleportPoint.transform.forward * Mathf.Abs(ct.velocity.y) * forceOut;
+        directionForce = new Vector3(Mathf.Min(Mathf.Abs(directionForce.x), 35f) * Mathf.Sign(directionForce.x),
+            Mathf.Min(Mathf.Abs(directionForce.y), 35f) * Mathf.Sign(directionForce.y),
+            Mathf.Min(Mathf.Abs(directionForce.z), 35f) * Mathf.Sign(directionForce.z)
+            );
 
         // Rotation
-        Quaternion difference = new Quaternion(0, Other.transform.rotation.y, 0, Other.transform.rotation.w) * Quaternion.Inverse( new Quaternion(0,transform.rotation.y,0,transform.rotation.w) * Quaternion.Euler(0, 180, 0));
+        Quaternion difference = new Quaternion(0, Other.transform.rotation.y, 0, Other.transform.rotation.w) * Quaternion.Inverse(new Quaternion(0, transform.rotation.y, 0, transform.rotation.w) * Quaternion.Euler(0, 180, 0));
         obj.rotation = difference * obj.rotation;
+
+        ct.AddForce(directionForce, ForceMode.Impulse);
+        Debug.Log(directionForce);
     }
 
     private void OnTriggerEnter(Collider other)

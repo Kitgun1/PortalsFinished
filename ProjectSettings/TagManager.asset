@@ -23,11 +23,11 @@ TagManager:
   - Walls
   - PortalGun
   - PortalWall
-  - 
-  - 
-  - 
-  - 
-  - 
+  - CharacterMesh
+  - LaserCube
+  - GlassWall
+  - LaserLine
+  - LittleTurret
   - 
   - 
   - 

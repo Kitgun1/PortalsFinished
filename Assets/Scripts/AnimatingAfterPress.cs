@@ -1,18 +1,27 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class AnimatingAfterPress : MonoBehaviour
+public class AnimatingAfterPress : AnimationAfterPressAbstract
 {
-    [SerializeField] private Transform _firstObject;
-    [SerializeField] private Transform _secondObject;
+    private OffPortalOnMove _offPortal;
 
-    public void Enter()
+    private void Start()
+    {
+        _offPortal = GetComponent<OffPortalOnMove>();
+    }
+
+    public override void Enter()
     {
         transform.DOMove(_firstObject.position, 1f);
     }
 
-    public void Exit()
+    public override void Exit()
     {
         transform.DOMove(_secondObject.position, 1f);
+
+        if (_offPortal != null && _offPortal.portal != null)
+        {
+            _offPortal.portal.GoToStartPos();
+        }
     }
 }

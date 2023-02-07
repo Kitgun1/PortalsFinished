@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Eiko.YaSDK;
 
 public class PlayerControls : MonoBehaviour, ITeleportable
 {
@@ -9,6 +11,8 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     public float jumpSpeed = 8.0f;
     public float rotateSpeed = 10f;
     public float forceout;
+    private float _startHeath;
+    [SerializeField] float _health;
 
     private Rigidbody _rigidbody;
     public Transform playerCamera;
@@ -21,10 +25,20 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     [SerializeField] private ParticleSystem _carringEffect;
 
     private bool _isGrounded;
-    [SerializeField] private float _isGgroundedDistance;
-    [SerializeField] private LayerMask _groundLayer;
 
     [SerializeField] private AudioSource _carringSound;
+
+    [SerializeField] private GameObject _menuPopUp;
+
+    [SerializeField] private Animator _animator;
+
+    private YandexSDK _yandexSDK;
+
+    [SerializeField] private Image _reflectionDamageImage;
+
+    public bool _isMenuOpen;
+
+    private bool _isJumpPressed = false;
 
     public bool IsTeleported()
     {
@@ -47,70 +61,123 @@ public class PlayerControls : MonoBehaviour, ITeleportable
         _rigidbody = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         LvlTransition.Instance.OpenLvl();
+        _yandexSDK = YandexSDK.instance;
+        _startHeath = _health;
     }
 
     void Update()
     {
-        rotateSpeed = PlayerPrefs.GetFloat("PlayerSensitivity", 10);
-        transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
-
-        playerCamera.Rotate(-Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
-        if (playerCamera.localRotation.eulerAngles.y != 0)
+        if (!_isMenuOpen)
         {
-            playerCamera.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
-        }
+            rotateSpeed = PlayerPrefs.GetFloat("PlayerSensitivity", 10);
+            transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
 
-        if (Input.GetMouseButtonDown(2))
-        {
-            if (!_isCarring)
+            playerCamera.Rotate(-Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
+            if (playerCamera.localRotation.eulerAngles.y != 0)
             {
-                Ray ray = playerCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f));
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
+                playerCamera.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
+            }
+
+            if (Input.GetMouseButtonDown(2))
+            {
+                if (!_isCarring)
                 {
-                    if (hit.collider.gameObject.layer == 7 && Vector3.Distance(hit.collider.transform.position, transform.position) <= 3)
+                    Ray ray = playerCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f));
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit))
                     {
-                        hit.collider.transform.SetParent(_placeForCatch.transform);
-                        hit.collider.transform.GetComponent<CarryObject>().SetCarry(_placeForCatch.transform);
-                        hit.collider.GetComponent<Rigidbody>().useGravity = false;
-                        _carringEffect.Play();
-                        _isCarring = true;
-                        _carringSound.Play();
+                        if (hit.collider.gameObject.layer == 14 || hit.collider.gameObject.layer == 7 && Vector3.Distance(hit.collider.transform.position, transform.position) <= 3)
+                        {
+                            hit.collider.transform.SetParent(_placeForCatch.transform);
+                            hit.collider.transform.GetComponent<CarryObject>().SetCarry(_placeForCatch.transform);
+                            hit.collider.GetComponent<Rigidbody>().useGravity = false;
+                            _carringEffect.Play();
+                            _isCarring = true;
+                            _carringSound.Play();
+                        }
                     }
                 }
             }
-        }
 
-        if (Input.GetMouseButtonUp(2))
-        {
-            if (_isCarring)
+            if (Input.GetMouseButtonUp(2))
             {
-                Transform child = _placeForCatch.transform.GetChild(0);
-
-                TeleportObject teleport = child.GetComponent<TeleportObject>();
-
-                child.GetComponent<Rigidbody>().useGravity = true;
-                child.GetComponent<CarryObject>().BreakCarry();
-                child.transform.parent = null;
-                _isCarring = false;
-                _carringEffect.Stop();
-                if (teleport != null)
+                if (_isCarring)
                 {
-                    teleport.OnTeleportEnd();
+                    Transform child = _placeForCatch.transform.GetChild(0);
+
+                    TeleportObject teleport = child.GetComponent<TeleportObject>();
+
+                    child.GetComponent<Rigidbody>().useGravity = true;
+                    child.GetComponent<CarryObject>().BreakCarry();
+                    child.transform.parent = null;
+                    _isCarring = false;
+                    _carringEffect.Stop();
+                    if (teleport != null)
+                    {
+                        teleport.OnTeleportEnd();
+                    }
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                _menuPopUp.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                _isMenuOpen = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                _yandexSDK.ShowRewarded("SkipLvl");
+                _yandexSDK.onRewardedAdReward += SkipLvl;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _isJumpPressed = true;
+            }
+
+            if (_health < _startHeath)
+            {
+                _health += Time.deltaTime / 1.5f;
+
+                if (_reflectionDamageImage != null)
+                {
+                    _reflectionDamageImage.color = new Color(1, 0, 0, Mathf.Lerp(0f, 0.4f, (float)Normalize((double)_health, 0d, 7d, 1d, 0d)));
                 }
             }
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+    private void SkipLvl(string str)
+    {
+        _yandexSDK.onRewardedAdReward -= SkipLvl;
+        StartCoroutine(OnFinishLvl());
+    }
+
+    private IEnumerator OnFinishLvl()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        PlayerPrefs.SetInt("CompleteLvl" + SceneManager.GetActiveScene().buildIndex, 1);
+        LvlTransition.Instance.CloseLvl();
+
+        yield return new WaitForSeconds(1.5f);
+
+        if (SceneManager.sceneCountInBuildSettings == SceneManager.GetActiveScene().buildIndex + 1)
         {
-            StartCoroutine(OnLoadScene());
+            SceneManager.LoadScene(0);
+        }
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 
     private void FixedUpdate()
     {
         MovementLogic();
-        JumpLogic();
+        if (_isJumpPressed) JumpLogic();
     }
 
     private void MovementLogic()
@@ -119,24 +186,31 @@ public class PlayerControls : MonoBehaviour, ITeleportable
 
         float moveVertical = Input.GetAxisRaw("Vertical");
 
+        if (Mathf.Abs(moveHorizontal) > 0 || Mathf.Abs(moveVertical) > 0)
+        {
+            _animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            _animator.SetBool("IsWalking", false);
+        }
+
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         
         movement = transform.TransformDirection(movement);
 
         if (Mathf.Abs(_rigidbody.velocity.x) >= MaxSpeed || Mathf.Abs(_rigidbody.velocity.z) >= MaxSpeed) return;
 
-        _rigidbody.AddForce(movement * speed, ForceMode.Force);
-
+        //_rigidbody.AddForce(movement * speed, ForceMode.Force);
+        _rigidbody.velocity = transform.TransformDirection(new Vector3(moveHorizontal * speed, _rigidbody.velocity.y, moveVertical * speed));
     }
 
     private void JumpLogic()
     {
-        if (Input.GetAxisRaw("Jump") > 0)
+        if (_isGrounded)
         {
-            if (_isGrounded)
-            {
-                _rigidbody.AddForce(transform.up * jumpSpeed);
-            }
+            _isJumpPressed = false;
+            _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, jumpSpeed, _rigidbody.velocity.z);
         }
     }
 
@@ -175,5 +249,27 @@ public class PlayerControls : MonoBehaviour, ITeleportable
         LvlTransition.Instance.CloseLvl();
         yield return new WaitForSeconds(1.5f);
         SceneManager.LoadScene(0);
+    }
+
+    private IEnumerator OnReLoadScene()
+    {
+        LvlTransition.Instance.CloseLvl();
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void GetDamage(float damage, Transform damagePoint)
+    {
+        _health -= damage;
+        if (_health <= 0)
+        {
+            StartCoroutine(OnReLoadScene());
+        }
+        _rigidbody.AddForce((transform.position - damagePoint.position) * 2f, ForceMode.Impulse);
+    }
+
+    double Normalize(double val, double valmin, double valmax, double min, double max)
+    {
+        return (((val - valmin) / (valmax - valmin)) * (max - min)) + min;
     }
 }

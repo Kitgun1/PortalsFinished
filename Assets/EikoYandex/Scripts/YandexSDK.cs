@@ -212,6 +212,7 @@ namespace Eiko.YaSDK
         /// </summary>
         /// <param name="placement"></param>
         public void OnRewarded(int placement) {
+            AudioListener.pause = false;
             Time.timeScale = 1;
             if (placement == rewardedAdPlacementsAsInt.Dequeue()) {
                 onRewardedAdReward?.Invoke(rewardedAdsPlacements.Dequeue());

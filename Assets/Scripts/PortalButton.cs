@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class PortalButton : MonoBehaviour
 {
-    [SerializeField] private List<AnimatingAfterPress> _animations;
+    [SerializeField] private List<AnimationAfterPressAbstract> _animations;
+
     private int _collidersCount;
     private AudioSource _audio;
 
@@ -22,6 +23,7 @@ public class PortalButton : MonoBehaviour
                 {
                     item.Enter();
                 }
+
                 _audio.Play();
             }
             _collidersCount++;
