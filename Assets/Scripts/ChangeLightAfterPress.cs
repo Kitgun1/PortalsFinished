@@ -21,7 +21,7 @@ public class ChangeLightAfterPress : AnimationAfterPressAbstract
         {
             if (_turret != null)
             {
-                _turret.IsActive = false;
+                _turret.Off();
             }
             _light1.SetActive(false);
             _light2.SetActive(true);
@@ -35,7 +35,7 @@ public class ChangeLightAfterPress : AnimationAfterPressAbstract
         {
             if (_turret != null)
             {
-                _turret.IsActive = true;
+                _turret.On();
             }
             _light1.SetActive(true);
             _light2.SetActive(false);

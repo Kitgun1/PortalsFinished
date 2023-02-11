@@ -96,9 +96,10 @@ GameObject:
   - component: {fileID: 7440043477831567062}
   - component: {fileID: 1015483043946458008}
   - component: {fileID: 4499488711528736399}
+  - component: {fileID: -382017436024391676}
   m_Layer: 8
   m_Name: Character1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,6 +143,7 @@ MonoBehaviour:
   rotateSpeed: 10
   forceout: 5
   _health: 7
+  _takeDistance: 3
   playerCamera: {fileID: 306437337671015371}
   _placeForCatch: {fileID: 2947720988951035787}
   _carringEffect: {fileID: 0}
@@ -150,6 +152,7 @@ MonoBehaviour:
   _animator: {fileID: 6710002565473707337}
   _reflectionDamageImage: {fileID: 0}
   _isMenuOpen: 0
+  _isMobile: 0
 --- !u!114 &7440043477831567062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,10 +197,22 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 06a3c51b0124d4c779df10f3d198b2fd, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.49999997
-  m_Height: 1.9999999
+  m_Radius: 0.1
+  m_Height: 1.365508
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -0.31724358, z: 0}
+--- !u!114 &-382017436024391676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456368557979482309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05888dfe1b562411cadb13816567356e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2947720988951035787
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,7 +399,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6186523911607869768}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.57, z: 0}
+  m_LocalPosition: {x: 0, y: 0.57, z: -0.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

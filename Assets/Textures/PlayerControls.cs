@@ -14,6 +14,8 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     private float _startHeath;
     [SerializeField] float _health;
 
+    [SerializeField] float _takeDistance;
+
     private Rigidbody _rigidbody;
     public Transform playerCamera;
 
@@ -40,6 +42,15 @@ public class PlayerControls : MonoBehaviour, ITeleportable
 
     private bool _isJumpPressed = false;
 
+    private bool _isDead;
+
+    public bool _isMobile;
+
+    private Joystick _joystick;
+    private Joystick _cameraJoystick;
+    private BoxCollider2D _collider;
+    private MainCanvas _canvas;
+
     public bool IsTeleported()
     {
         return _isTeleported;
@@ -59,82 +70,67 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        Cursor.lockState = CursorLockMode.Locked;
+        
         LvlTransition.Instance.OpenLvl();
         _yandexSDK = YandexSDK.instance;
         _startHeath = _health;
+        rotateSpeed = PlayerPrefs.GetFloat("PlayerSensitivity", 4);
+
+        _isMobile = GetComponent<CheckWebGLPlatform>().CheckIfMobile();
+        _canvas = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<MainCanvas>();
+        _joystick = _canvas.joystick;
+        _cameraJoystick = _canvas.CameraJoystick;
+        _collider = _canvas._collider;
+        if (!_isMobile)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     void Update()
     {
         if (!_isMenuOpen)
         {
-            rotateSpeed = PlayerPrefs.GetFloat("PlayerSensitivity", 10);
-            transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
-
-            playerCamera.Rotate(-Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
-            if (playerCamera.localRotation.eulerAngles.y != 0)
+            if (!_isMobile)
             {
-                playerCamera.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
-            }
+                MouseRotation();
 
-            if (Input.GetMouseButtonDown(2))
-            {
-                if (!_isCarring)
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    Ray ray = playerCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f));
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit))
+                    if (!_isCarring)
                     {
-                        if (hit.collider.gameObject.layer == 14 || hit.collider.gameObject.layer == 7 && Vector3.Distance(hit.collider.transform.position, transform.position) <= 3)
-                        {
-                            hit.collider.transform.SetParent(_placeForCatch.transform);
-                            hit.collider.transform.GetComponent<CarryObject>().SetCarry(_placeForCatch.transform);
-                            hit.collider.GetComponent<Rigidbody>().useGravity = false;
-                            _carringEffect.Play();
-                            _isCarring = true;
-                            _carringSound.Play();
-                        }
+                        TakeObject();
+                    }
+                    else
+                    {
+                        DropObject();
                     }
                 }
-            }
 
-            if (Input.GetMouseButtonUp(2))
-            {
-                if (_isCarring)
+                if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    Transform child = _placeForCatch.transform.GetChild(0);
+                    _menuPopUp.SetActive(true);
+                    Cursor.lockState = CursorLockMode.None;
+                    _isMenuOpen = true;
+                }
 
-                    TeleportObject teleport = child.GetComponent<TeleportObject>();
+                if (Input.GetKeyDown(KeyCode.N))
+                {
+                    _yandexSDK.ShowRewarded("SkipLvl");
+                    _yandexSDK.onRewardedAdReward += SkipLvl;
+                }
 
-                    child.GetComponent<Rigidbody>().useGravity = true;
-                    child.GetComponent<CarryObject>().BreakCarry();
-                    child.transform.parent = null;
-                    _isCarring = false;
-                    _carringEffect.Stop();
-                    if (teleport != null)
-                    {
-                        teleport.OnTeleportEnd();
-                    }
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    _isJumpPressed = true;
                 }
             }
-
-            if (Input.GetKeyDown(KeyCode.Escape))
+            else
             {
-                _menuPopUp.SetActive(true);
-                Cursor.lockState = CursorLockMode.None;
-                _isMenuOpen = true;
-            }
-
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                _yandexSDK.ShowRewarded("SkipLvl");
-                _yandexSDK.onRewardedAdReward += SkipLvl;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _isJumpPressed = true;
+                //if (_canvas._collider.bounds.Contains(Input.mousePosition))
+                //{
+                    //MobileRotation();
+                //}
             }
 
             if (_health < _startHeath)
@@ -145,6 +141,106 @@ public class PlayerControls : MonoBehaviour, ITeleportable
                 {
                     _reflectionDamageImage.color = new Color(1, 0, 0, Mathf.Lerp(0f, 0.4f, (float)Normalize((double)_health, 0d, 7d, 1d, 0d)));
                 }
+            }
+        }
+    }
+
+    private void MobileRotation()
+    {
+        if (_collider.bounds.Contains(Input.mousePosition))
+        {
+            float ratX = _cameraJoystick.Horizontal;
+            float ratY = _cameraJoystick.Vertical;
+
+            transform.Rotate(0, ratX / 2 * rotateSpeed, 0);
+
+            playerCamera.Rotate(-ratY / 2 * rotateSpeed, 0, 0);
+            if (playerCamera.localRotation.eulerAngles.y != 0)
+            {
+                playerCamera.Rotate(ratY / 2 * rotateSpeed, 0, 0);
+            }
+        }
+    }
+
+    private void MouseRotation()
+    {
+        transform.Rotate(0, Input.GetAxis("Mouse X") * rotateSpeed, 0);
+
+        playerCamera.Rotate(-Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
+        if (playerCamera.localRotation.eulerAngles.y != 0)
+        {
+            playerCamera.Rotate(Input.GetAxis("Mouse Y") * rotateSpeed, 0, 0);
+        }
+    }
+
+    public void Pause()
+    {
+        _menuPopUp.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        _isMenuOpen = true;
+    }
+
+    public void SkipLvl()
+    {
+        _yandexSDK.ShowRewarded("SkipLvl");
+        _yandexSDK.onRewardedAdReward += SkipLvl;
+    }
+
+    public void Jump()
+    {
+        _isJumpPressed = true;
+    }
+
+    public void Carring()
+    {
+        if (!_isCarring)
+        {
+            TakeObject();
+        }
+        else
+        {
+            DropObject();
+        }
+    }
+
+    private void TakeObject()
+    {
+        if (!_isCarring)
+        {
+            Ray ray = playerCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if ((hit.collider.gameObject.layer == 14 || hit.collider.gameObject.layer == 7 || hit.collider.gameObject.layer == 17) && Vector3.Distance(hit.collider.transform.position, transform.position) <= _takeDistance)
+                {
+                    Debug.Log(Vector3.Distance(hit.collider.transform.position, transform.position));
+                    hit.collider.transform.SetParent(_placeForCatch.transform);
+                    hit.collider.transform.GetComponent<CarryObject>().SetCarry(_placeForCatch.transform);
+                    hit.collider.GetComponent<Rigidbody>().useGravity = false;
+                    _carringEffect.Play();
+                    _isCarring = true;
+                    _carringSound.Play();
+                }
+            }
+        }
+    }
+
+    private void DropObject()
+    {
+        if (_isCarring)
+        {
+            Transform child = _placeForCatch.transform.GetChild(0);
+
+            TeleportObject teleport = child.GetComponent<TeleportObject>();
+
+            child.GetComponent<Rigidbody>().useGravity = true;
+            child.GetComponent<CarryObject>().BreakCarry();
+            child.transform.parent = null;
+            _isCarring = false;
+            _carringEffect.Stop();
+            if (teleport != null)
+            {
+                teleport.OnTeleportEnd();
             }
         }
     }
@@ -178,13 +274,30 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     {
         MovementLogic();
         if (_isJumpPressed) JumpLogic();
+
+        if (_isMobile) MobileRotation();
     }
 
     private void MovementLogic()
     {
-        float moveHorizontal = Input.GetAxisRaw("Horizontal");
+        float moveHorizontal = 0, moveVertical = 0;
 
-        float moveVertical = Input.GetAxisRaw("Vertical");
+
+        if (_isMobile)
+        {
+            if (!_canvas._collider.bounds.Contains(Input.mousePosition))
+            {
+                moveHorizontal = _joystick.Horizontal;
+                moveVertical = _joystick.Vertical;
+            }
+        }
+        else
+        {
+            moveHorizontal = Input.GetAxisRaw("Horizontal");
+
+            moveVertical = Input.GetAxisRaw("Vertical");
+        }
+        
 
         if (Mathf.Abs(moveHorizontal) > 0 || Mathf.Abs(moveVertical) > 0)
         {
@@ -258,14 +371,28 @@ public class PlayerControls : MonoBehaviour, ITeleportable
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void GetDamage(float damage, Transform damagePoint)
+    public void GetDamage(float damage, Transform damagePoint, float force)
     {
         _health -= damage;
-        if (_health <= 0)
+        if (_health <= 0 && !_isDead)
+        {
+            _isDead = true;
+            StartCoroutine(OnReLoadScene());
+        }
+        _rigidbody.AddForce((transform.position - damagePoint.position) * force, ForceMode.Force);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, _takeDistance);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Dead")
         {
             StartCoroutine(OnReLoadScene());
         }
-        _rigidbody.AddForce((transform.position - damagePoint.position) * 2f, ForceMode.Impulse);
     }
 
     double Normalize(double val, double valmin, double valmax, double min, double max)

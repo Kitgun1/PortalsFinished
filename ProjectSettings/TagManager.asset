@@ -9,6 +9,10 @@ TagManager:
   - Portal
   - PortalWall
   - Ground
+  - MainCanvas
+  - Joystick
+  - CameraJoystick
+  - Dead
   layers:
   - Default
   - TransparentFX

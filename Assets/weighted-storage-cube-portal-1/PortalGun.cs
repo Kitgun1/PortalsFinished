@@ -15,9 +15,48 @@ public class PortalGun : MonoBehaviour
         _player = GetComponent<PlayerControls>();
     }
 
+    public void ShootBlue()
+    {
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.gameObject.layer != 12) return;
+
+
+            Blue.transform.rotation = Quaternion.LookRotation(hit.normal);
+            Blue.transform.position = hit.point + Blue.transform.forward * 0.3f;
+            _BlueParticle.Play();
+            OffPortalOnMove portalPlace = hit.collider.GetComponent<OffPortalOnMove>();
+            if (portalPlace != null) portalPlace.portal = Blue;
+
+            _portalShootSound.Play();
+        }
+        _animation.Play();
+    }
+
+    public void ShootRed()
+    {
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.gameObject.layer != 12) return;
+
+            Red.transform.rotation = Quaternion.LookRotation(hit.normal);
+            Red.transform.position = hit.point + Red.transform.forward * 0.3f;
+            _RedParticle.Play();
+            OffPortalOnMove portalPlace = hit.collider.GetComponent<OffPortalOnMove>();
+            if (portalPlace != null) portalPlace.portal = Red;
+
+            _portalShootSound.Play();
+        }
+        _animation.Play();
+    }
+
     private void Update()
     {
-        if (!_player._isMenuOpen)
+        if (!_player._isMenuOpen && !_player._isMobile)
         {
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
             {

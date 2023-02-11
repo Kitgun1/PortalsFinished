@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Eiko.YaSDK.Data;
 
 public class LvlItem : MonoBehaviour
 {
@@ -10,15 +11,17 @@ public class LvlItem : MonoBehaviour
     [SerializeField] private int _sceneIndex;
     [SerializeField] private GameObject _lock;
     [SerializeField] private Text _text;
+    [SerializeField] private bool _isTitorial;
 
     private void Start()
     {
         _lvlButton.onClick.AddListener(LoadScene);
-        _text.text = "Уровень " + _sceneIndex;
+        YandexPrefs.Init();
+        if (!_isTitorial) _text.text = (_sceneIndex - 1).ToString();
 
         if (_sceneIndex != 1)
         {
-            if (PlayerPrefs.GetInt("CompleteLvl" + (_sceneIndex - 1), 0) == 1)
+            if (YandexPrefs.GetInt("CompleteLvl" + (_sceneIndex - 1), 0) == 1)
             {
                 _lvlButton.interactable = true;
                 _lock.SetActive(false);

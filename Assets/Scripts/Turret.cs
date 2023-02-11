@@ -15,6 +15,8 @@ public class Turret : MonoBehaviour
     [SerializeField] private ParticleSystem _fire;
     [SerializeField] private ParticleSystem _explosion;
     private AudioSource _audioExp;
+    [SerializeField] TurretType _turretType;
+    private Rigidbody _rigidbody;
 
     public bool IsActive
     {
@@ -30,6 +32,7 @@ public class Turret : MonoBehaviour
 
     private void Awake()
     {
+        _rigidbody = GetComponent<Rigidbody>();
         _audio = GetComponent<AudioSource>();
     }
 
@@ -69,6 +72,13 @@ public class Turret : MonoBehaviour
                 }
             }
         }
+        if (_turretType == TurretType.LittleTurret)
+        {
+            if (_rigidbody.velocity.magnitude > 3f)
+            {
+                Kill();
+            }
+        }
     }
 
     private IEnumerator SendDamage()
@@ -76,7 +86,12 @@ public class Turret : MonoBehaviour
         _isDamagable = false;
         yield return new WaitForSeconds(_fireDelay);
 
-        _player.GetDamage(_damage, transform);
+        float force = 0;
+
+        if (_turretType == TurretType.LittleTurret) force = 10f;
+        else if (_turretType == TurretType.BigTurret) force = 50f;
+
+        _player.GetDamage(_damage, transform, force);
         _isDamagable = true;
     }
 
@@ -97,6 +112,8 @@ public class Turret : MonoBehaviour
 
     private IEnumerator StartKilling()
     {
+        StopCoroutine(SendDamage());
+        _isActive = false;
         _fire.Play();
         yield return new WaitForSeconds(1f);
         _audioExp = _explosion.GetComponent<AudioSource>();
@@ -105,4 +122,21 @@ public class Turret : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         gameObject.SetActive(false);
     }
+
+    public void Off()
+    {
+        StopAllCoroutines();
+        _isActive = false;
+    }
+
+    public void On()
+    {
+        _isActive = true;
+    }
+}
+
+public enum TurretType
+{
+    BigTurret,
+    LittleTurret
 }

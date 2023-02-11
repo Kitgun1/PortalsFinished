@@ -28,7 +28,7 @@ public class Teleporter : MonoBehaviour
         // Position
         Vector3 localPos = TeleportPoint.worldToLocalMatrix.MultiplyPoint3x4(obj.position);
         localPos = new Vector3(-localPos.x, localPos.y, -localPos.z);
-        obj.position = Other.transform.localToWorldMatrix.MultiplyPoint3x4(localPos);
+        obj.position = Other.TeleportPoint.transform.localToWorldMatrix.MultiplyPoint3x4(localPos);
 
         Rigidbody ct = obj.GetComponent<Rigidbody>();
         float forceOut = Mathf.Abs(ct.velocity.y) < 3f ? 1f : obj.GetComponent<PlayerControls>().forceout;
@@ -43,7 +43,12 @@ public class Teleporter : MonoBehaviour
         obj.rotation = difference * obj.rotation;
 
         ct.AddForce(directionForce, ForceMode.Impulse);
-        Debug.Log(directionForce);
+
+        Turret turret = obj.GetComponent<Turret>();
+        if (turret != null)
+        {
+            turret.Kill();
+        }
     }
 
     private void OnTriggerEnter(Collider other)

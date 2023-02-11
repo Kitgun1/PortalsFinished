@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using Eiko.YaSDK.Editor;
+using Eiko.YaSDK.Data;
 #endif
 
 using System;
@@ -17,13 +18,21 @@ namespace Eiko.YaSDK
         public CanvasAddEditor editorCanvas;
     #endif
         public const int ReloadAdsSeconds = 30;
+        public const string key = "AddsOff";
+        public bool AdsEnabled { get; private set; }
 
-    
         public static YandexSDK instance;
         [DllImport("__Internal")]
         private static extern void GetUserData();
         [DllImport("__Internal")]
         private static extern void ShowFullscreenAd();
+        [DllImport("__Internal")]
+        private static extern void SetData(string key,string value);
+        [DllImport("__Internal")]
+        private static extern void SetScore(string key, int value);
+        [DllImport("__Internal")]
+        private static extern void InitPlayerData();
+
         /// <summary>
         /// Returns an int value which is sent to index.html
         /// </summary>
@@ -44,8 +53,8 @@ namespace Eiko.YaSDK
 
         [DllImport("__Internal")]
         private static extern void Review();
-        
-
+        [DllImport("__Internal")]
+        private static extern void GetPurchases();
 
         public event Action addsOnReloaded;
         public event Action onUserDataReceived;
@@ -71,7 +80,7 @@ namespace Eiko.YaSDK
         /// <summary>
         /// Покупка успешно совершена
         /// </summary>
-        public event Action<string> onPurchaseSuccess;
+        public event Action<Purchase> onPurchaseSuccess;
         /// <summary>
         /// Покупка не удалась: в консоли разработчика не добавлен товар с таким id,
         /// пользователь не авторизовался, передумал и закрыл окно оплаты,
@@ -80,14 +89,15 @@ namespace Eiko.YaSDK
         public event Action<string> onPurchaseFailed;
 
         public event Action onClose;
-
+        public event Action onPurchaseInitialize;
+        public event Action onPurchaseInitializeFailed;
         public Queue<int> rewardedAdPlacementsAsInt = new Queue<int>();
         public Queue<string> rewardedAdsPlacements = new Queue<string>();
         private Action<ReviewCallback> actionReview;
         public bool addsAvailable;
         private bool IsReviewed = false;
         public UserData user;
-
+        public string adsPurchize="AddOff";
         public string Lang = "ru";
 
         private void Awake() {
@@ -105,6 +115,8 @@ namespace Eiko.YaSDK
 #if UNITY_EDITOR
             editorCanvas =  Instantiate(editorCanvas);
 #endif
+            AdsEnabled = 0 == PlayerPrefs.GetInt(key, 0);
+            onPurchaseSuccess += PurchizeCallbackAds;
         }
 
         /// <summary>
@@ -156,6 +168,30 @@ namespace Eiko.YaSDK
 #endif
         }
 
+        public void AdsOff()
+        {
+            PlayerPrefs.SetInt(key, 1);
+            AdsEnabled = false;
+            StopAllCoroutines();
+            Debug.Log("AdsOff");
+            addsAvailable = false;
+        }
+        public void ProcessPurchizeAdsDisabled(Action action= null)
+        {
+            this.action = action;
+            ProcessPurchase(adsPurchize);
+        }
+        private Action action;
+        private void PurchizeCallbackAds(Purchase purchase)
+        {
+
+            if (purchase.productID == adsPurchize)
+            {
+                AdsOff();
+                onPurchaseSuccess -= PurchizeCallbackAds;
+                action?.Invoke();
+            }
+        }
         /// <summary>
         /// Call this to receive user data
         /// </summary>
@@ -174,6 +210,8 @@ namespace Eiko.YaSDK
         public void ProcessPurchase(string id) {
 #if !UNITY_EDITOR && UNITY_WEBGL
             Purchase(id);
+#else
+            OnPurchaseSuccess(id);
 #endif
         }
     
@@ -212,7 +250,6 @@ namespace Eiko.YaSDK
         /// </summary>
         /// <param name="placement"></param>
         public void OnRewarded(int placement) {
-            AudioListener.pause = false;
             Time.timeScale = 1;
             if (placement == rewardedAdPlacementsAsInt.Dequeue()) {
                 onRewardedAdReward?.Invoke(rewardedAdsPlacements.Dequeue());
@@ -242,12 +279,10 @@ namespace Eiko.YaSDK
             rewardedAdPlacementsAsInt.Clear();
         }
 
-        /// <summary>
-        /// Callback from index.html
-        /// </summary>
-        /// <param name="id"></param>
-        public void OnPurchaseSuccess(string id) {
-            onPurchaseSuccess?.Invoke(id);
+        public void OnPurchaseSuccess(string json)
+        {
+            var purchase = JsonUtility.FromJson<Purchase>(json);
+            onPurchaseSuccess?.Invoke(purchase);
         }
 
         /// <summary>
@@ -265,7 +300,11 @@ namespace Eiko.YaSDK
         public void OnClose() {
             onClose?.Invoke();
         }
-    
+        public event Action<GetPurchasesCallback> GettedPurchase;
+        public void TryGetPurchases()
+        {
+            GetPurchases();
+        }
         public IEnumerator WaitAddReload()
         {
             addsAvailable = false;
@@ -303,6 +342,100 @@ namespace Eiko.YaSDK
             }
             actionReview?.Invoke(review);            
         }
+        public event Action<GetDataCallback> onDataRecived;
+        public event Action noAutorized;
+        public void OnGetData(string json)
+        {
+            GetDataCallback callback;
+            if (!string.IsNullOrEmpty(json))
+            {
+                callback = JsonUtility.FromJson<GetDataCallback>(json); 
+                if(callback.data==null)
+                {
+                    callback.data = new KeyValuePairStringCallback[0];
+                }
+                if(callback.score == null)
+                {
+                    callback.score = new KeyValuePairIntCallback[0];
+                }
+            }
+            else
+            {
+                callback = new GetDataCallback();
+                callback.data = new KeyValuePairStringCallback[0];
+                callback.score = new KeyValuePairIntCallback[0];
+            }
+            onDataRecived?.Invoke(callback);
+        }
+        public void NoAutorized()
+        {
+            noAutorized?.Invoke();
+        }
+        
+        public void SetPlayerData(string key, string value)
+        {
+#if !UNITY_EDITOR
+            SetData(key, value);
+#endif
+        }
+        
+        public void SetPlayerScore(string key, int value)
+        {
+#if !UNITY_EDITOR
+            SetScore(key, value);
+#endif
+        }
+
+        public void InitData()
+        {
+#if !UNITY_EDITOR
+            InitPlayerData();
+#else
+            NoAutorized();
+#endif
+        }
+        public void OnPurchaseInitialize()
+        {
+            onPurchaseInitialize?.Invoke();
+        }
+        [ContextMenu("Test")]
+        public void Test()
+        {
+            string a = "{\"purchases\":[{\"productID\":\"BuyAll\",\"purchaseTime\":0,\"purchaseToken\":\"957ff7fa-938a-4c14-9454-d8a4e990347a\"},{\"productID\":\"Skin11Unlocked\",\"purchaseTime\":0,\"purchaseToken\":\"111ab5c1-33ba-4835-92f3-acb7135ead2f\"},{\"productID\":\"BuyAll\",\"purchaseTime\":0,\"purchaseToken\":\"4fe915c5-59b9-43ef-9993-e96488c3fbd0\"},{\"productID\":\"Skin12Unlocked\",\"purchaseTime\":0,\"purchaseToken\":\"bf1cd480-cd97-44cb-9938-5f81db24c0e6\"},{\"productID\":\"AddOff\",\"purchaseTime\":0,\"purchaseToken\":\"044f9005-9a8e-4a16-9256-eaa513468d1f\"},{\"productID\":\"BuyAll\",\"purchaseTime\":0,\"purchaseToken\":\"a140dc49-2d57-403f-9352-7be76ba039e2\"},{\"productID\":\"AddOff\",\"purchaseTime\":0,\"purchaseToken\":\"a6894793-fc17-43c8-a03e-fb2afd1369e7\"}]}";
+            var b = JsonUtility.FromJson<GetPurchasesCallback>(a);
+            foreach (var item in b.purchases)
+            {
+                Debug.Log(item.productID);
+            }
+        }
+
+        public void OnPurchaseInitializeFailed()
+        {
+            onPurchaseInitializeFailed?.Invoke();
+        }
+        public event Action onGetPurchaseFailed;
+        public void OnGetPurchaseFailed()
+        {
+            onGetPurchaseFailed?.Invoke();
+        }
+    }
+    [Serializable]
+    public class GetDataCallback
+    {
+        public KeyValuePairStringCallback[] data;
+        public KeyValuePairIntCallback[] score;
+    }
+    [Serializable]
+    public class KeyValuePairStringCallback
+    { 
+        public string key;
+        public string value;
+    }
+    [Serializable]
+    public class KeyValuePairIntCallback
+    {
+        public string key;
+        public int value;
     }
 
     public struct ReviewCallback
@@ -318,5 +451,19 @@ namespace Eiko.YaSDK
         public string avatarUrlSmall;
         public string avatarUrlMedium;
         public string avatarUrlLarge;
+    }
+    [Serializable]
+    public class GetPurchasesCallback
+    {
+        public Purchase[] purchases;
+        public string signature;
+    }
+    [Serializable]
+    public class Purchase
+    {
+        public string productID;
+        public string purchaseToken;
+        public string developerPayload;
+        public string signature;
     }
 }

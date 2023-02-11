@@ -6,6 +6,11 @@ public class LoadMainMenu : MonoBehaviour
 {
     [SerializeField] private PlayerControls _player;
 
+    private void Start()
+    {
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerControls>();
+    }
+
     public void LoadMenu()
     {
         StartCoroutine(OnLoadScene());
@@ -20,7 +25,6 @@ public class LoadMainMenu : MonoBehaviour
 
     public void LockCursor()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         _player._isMenuOpen = false;
     }
 }

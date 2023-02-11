@@ -6,6 +6,12 @@ public class CarryObject : MonoBehaviour
 {
     public bool IsCarring;
     public Transform ParentObject;
+    private Rigidbody _rigidbody;
+
+    private void Start()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+    }
 
     private void Update()
     {
@@ -19,11 +25,19 @@ public class CarryObject : MonoBehaviour
     {
         ParentObject = parent;
         IsCarring = true;
+        if (_rigidbody != null)
+        {
+            _rigidbody.isKinematic = true;
+        }
     }
 
     public void BreakCarry()
     {
         ParentObject = null;
         IsCarring = false;
+        if (_rigidbody != null)
+        {
+            _rigidbody.isKinematic = false;
+        }
     }
 }
