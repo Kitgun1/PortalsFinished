@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using Eiko.YaSDK;
+using Eiko.YaSDK.Data;
 
 public class FinishLvl : MonoBehaviour
 {
@@ -39,7 +40,7 @@ public class FinishLvl : MonoBehaviour
             _yandex.ShowInterstitial();
         }
 
-        PlayerPrefs.SetInt("CompleteLvl" + SceneManager.GetActiveScene().buildIndex, 1);
+        YandexPrefs.SetInt("CompleteLvl" + SceneManager.GetActiveScene().buildIndex, 1);
         LvlTransition.Instance.CloseLvl();
 
         yield return new WaitForSeconds(1.5f);

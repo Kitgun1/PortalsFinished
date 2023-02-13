@@ -16,8 +16,8 @@ public class LvlItem : MonoBehaviour
     private void Start()
     {
         _lvlButton.onClick.AddListener(LoadScene);
-        YandexPrefs.Init();
-        if (!_isTitorial) _text.text = (_sceneIndex - 1).ToString();
+        
+        if (!_isTitorial) _text.text = _sceneIndex.ToString();
 
         if (_sceneIndex != 1)
         {

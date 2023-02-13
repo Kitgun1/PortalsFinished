@@ -17,7 +17,8 @@ namespace Lean.Localization
 			None,
 			SystemLanguage,
 			CurrentCulture,
-			CurrentUICulture
+			CurrentUICulture,
+			YandexDomen
 		}
 
 		public enum SaveLoadType
@@ -540,7 +541,7 @@ namespace Lean.Localization
 							CurrentAliases.TryGetValue(cultureInfo.Name, out currentLanguage);
 						}
 					}
-					break;
+						break;
 				}
 			}
 

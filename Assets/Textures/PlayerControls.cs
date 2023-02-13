@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Eiko.YaSDK;
+using Eiko.YaSDK.Data;
 
 public class PlayerControls : MonoBehaviour, ITeleportable
 {
@@ -180,6 +181,12 @@ public class PlayerControls : MonoBehaviour, ITeleportable
         _isMenuOpen = true;
     }
 
+    public void SkipLvlN()
+    {
+        _yandexSDK.ShowRewarded("SkipLvl");
+        _yandexSDK.onRewardedAdReward += SkipLvl;
+    }
+
     public void SkipLvl()
     {
         _yandexSDK.ShowRewarded("SkipLvl");
@@ -255,7 +262,7 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     {
         yield return new WaitForSeconds(1.5f);
 
-        PlayerPrefs.SetInt("CompleteLvl" + SceneManager.GetActiveScene().buildIndex, 1);
+        YandexPrefs.SetInt("CompleteLvl" + SceneManager.GetActiveScene().buildIndex, 1);
         LvlTransition.Instance.CloseLvl();
 
         yield return new WaitForSeconds(1.5f);
