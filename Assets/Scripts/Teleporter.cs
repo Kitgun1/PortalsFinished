@@ -27,7 +27,7 @@ public class Teleporter : MonoBehaviour
     {
         // Position
         Vector3 localPos = TeleportPoint.worldToLocalMatrix.MultiplyPoint3x4(obj.position);
-        localPos = new Vector3(-localPos.x, localPos.y, -localPos.z);
+        //localPos = new Vector3(-localPos.x, localPos.y, -localPos.z);
         obj.position = Other.TeleportPoint.transform.localToWorldMatrix.MultiplyPoint3x4(localPos);
 
         Rigidbody ct = obj.GetComponent<Rigidbody>();

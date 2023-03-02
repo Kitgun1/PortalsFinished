@@ -55,6 +55,9 @@ MonoBehaviour:
   _fire: {fileID: 0}
   _explosion: {fileID: 0}
   _turretType: 0
+  _mask:
+    serializedVersion: 2
+    m_Bits: 245559
 --- !u!82 &4975149341269809662
 AudioSource:
   m_ObjectHideFlags: 0

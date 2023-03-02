@@ -1,7 +1,5 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using Eiko.YaSDK.Data;
 using Eiko.YaSDK;
 
 public class StartCanvas : MonoBehaviour
@@ -10,16 +8,19 @@ public class StartCanvas : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(WaitToInitYandex());
-    }
-
-    private IEnumerator WaitToInitYandex()
-    {
         if (YandexSDK.instance.IsFirstOpen)
         {
-            yield return YandexPrefs.Init();
+            YandexSDK.instance.onInitializeData += WaitToInitYandex;
         }
-        YandexSDK.instance.IsFirstOpen = false;
+        else
+        {
+            _PlayBtn.interactable = true;
+        }
+    }
+
+    private void WaitToInitYandex()
+    {
         _PlayBtn.interactable = true;
+        YandexSDK.instance.onInitializeData -= WaitToInitYandex;
     }
 }

@@ -17,6 +17,7 @@ public class Turret : MonoBehaviour
     private AudioSource _audioExp;
     [SerializeField] TurretType _turretType;
     private Rigidbody _rigidbody;
+    [SerializeField] private LayerMask _mask;
 
     public bool IsActive
     {
@@ -44,7 +45,7 @@ public class Turret : MonoBehaviour
 
             Ray ray = new Ray(transform.position, _player.transform.position - transform.position);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, _mask))
             {
                 if (hit.collider.gameObject.layer == 8 && Vector3.Distance(transform.position, hit.collider.transform.position) <= _fireDistance)
                 {
@@ -88,7 +89,7 @@ public class Turret : MonoBehaviour
 
         float force = 0;
 
-        if (_turretType == TurretType.LittleTurret) force = 10f;
+        if (_turretType == TurretType.LittleTurret) force = 5f;
         else if (_turretType == TurretType.BigTurret) force = 50f;
 
         _player.GetDamage(_damage, transform, force);

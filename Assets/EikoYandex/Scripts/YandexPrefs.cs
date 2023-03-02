@@ -5,7 +5,7 @@ namespace Eiko.YaSDK.Data
     public class YandexPrefsParams
     {
         public bool IsAutorised { get; set; } = false;
-        public bool IsInit { get; set; } = false; 
+        public bool IsInit { get; set; } = false;
         public Dictionary<string, string> data;
         public Dictionary<string, int> score;
         public YandexPrefsParams()
@@ -26,10 +26,10 @@ namespace Eiko.YaSDK.Data
         }
     }
     public static class YandexPrefs
-    {        
+    {
         private static YandexPrefsParams param;
         public static InitAsyncOperation Init()
-        { 
+        {
             param = new YandexPrefsParams();
             var operation = new InitAsyncOperation(param);
             YandexSDK.instance.InitData();
@@ -41,21 +41,21 @@ namespace Eiko.YaSDK.Data
             if (param.IsAutorised)
             {
                 param.score[key] = value;
-                YandexSDK.instance.SetPlayerScore(key,value);
+                YandexSDK.instance.SetPlayerScore(key, value);
             }
             else
             {
-                PlayerPrefs.SetInt(key,value);
+                PlayerPrefs.SetInt(key, value);
             }
         }
         public static void SetString(string key, string value)
         {
-            Debug.Log(key+" " +value);
+            Debug.Log(key + " " + value);
             if (param.IsAutorised)
             {
 
-                param.data[key]=value;
-                YandexSDK.instance.SetPlayerData(key,value);
+                param.data[key] = value;
+                YandexSDK.instance.SetPlayerData(key, value);
             }
             else
             {
@@ -84,7 +84,7 @@ namespace Eiko.YaSDK.Data
                     return value;
                 else
                     return "";
-                }
+            }
             else
             {
                 return PlayerPrefs.GetString(key, "");
@@ -141,7 +141,7 @@ namespace Eiko.YaSDK.Data
 
         private YandexPrefsParams param;
         public bool IsSuccess;
-        public override bool keepWaiting =>_keepWaiting;
+        public override bool keepWaiting => _keepWaiting;
         private bool _keepWaiting = true;
         private void Callback(bool success)
         {

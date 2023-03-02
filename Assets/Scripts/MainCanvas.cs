@@ -15,6 +15,7 @@ public class MainCanvas : MonoBehaviour
     public Button TakeButton;
     public Joystick CameraJoystick;
     public BoxCollider2D _collider;
+    [SerializeField] private GameObject _desktopMenuBtn;
 
     private bool _isMobile;
 
@@ -26,6 +27,7 @@ public class MainCanvas : MonoBehaviour
             MobileControl.SetActive(true);
             SkipLvlPC.SetActive(false);
             SetMobileControls();
+            _desktopMenuBtn.SetActive(false);
         }
     }
 

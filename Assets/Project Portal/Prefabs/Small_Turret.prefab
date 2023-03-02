@@ -2681,12 +2681,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
-  _damage: 0.2
+  _damage: 0.4
   _fireDelay: 0.2
   _fireDistance: 0
   _fire: {fileID: 2515134243796605341}
   _explosion: {fileID: 5495397214059813442}
   _turretType: 1
+  _mask:
+    serializedVersion: 2
+    m_Bits: 245559
 --- !u!114 &1323440488793667149
 MonoBehaviour:
   m_ObjectHideFlags: 0

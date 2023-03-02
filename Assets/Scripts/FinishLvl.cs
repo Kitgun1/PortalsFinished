@@ -10,6 +10,10 @@ public class FinishLvl : MonoBehaviour
     [SerializeField] private ParticleSystem _finishParticle;
     private int _winCounter;
     private YandexSDK _yandex;
+    public bool _isRewardedLvl;
+    public bool _canLoadLvl;
+    public GunObject gunObject;
+    public RewardedPanel rewardedPanel;
 
     private void Start()
     {
@@ -31,6 +35,16 @@ public class FinishLvl : MonoBehaviour
         }
     }
 
+    public void StartFinishLvl()
+    {
+        StartCoroutine(OnFinishLvl());
+    }
+
+    public void SetLoadable()
+    {
+        _canLoadLvl = true;
+    }
+
     private IEnumerator OnFinishLvl()
     {
         yield return new WaitForSeconds(1.5f);
@@ -41,6 +55,14 @@ public class FinishLvl : MonoBehaviour
         }
 
         YandexPrefs.SetInt("CompleteLvl" + SceneManager.GetActiveScene().buildIndex, 1);
+
+        if (_isRewardedLvl)
+        {
+            rewardedPanel.gameObject.SetActive(true);
+            rewardedPanel.OpenPanel(gunObject, this);
+            yield return new WaitUntil(() => _canLoadLvl == true);
+        }
+
         LvlTransition.Instance.CloseLvl();
 
         yield return new WaitForSeconds(1.5f);

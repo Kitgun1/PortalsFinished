@@ -9,6 +9,7 @@ public class PortalGun : MonoBehaviour
     public ParticleSystem _BlueParticle;
     [SerializeField] private AudioSource _portalShootSound;
     private PlayerControls _player;
+    [SerializeField] LayerMask _mask;
 
     private void Start()
     {
@@ -19,7 +20,7 @@ public class PortalGun : MonoBehaviour
     {
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, _mask))
         {
             if (hit.collider.gameObject.layer != 12) return;
 
@@ -39,7 +40,7 @@ public class PortalGun : MonoBehaviour
     {
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, _mask))
         {
             if (hit.collider.gameObject.layer != 12) return;
 
@@ -62,7 +63,7 @@ public class PortalGun : MonoBehaviour
             {
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, _mask))
                 {
                     if (hit.collider.gameObject.layer != 12) return;
 

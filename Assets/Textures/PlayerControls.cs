@@ -110,15 +110,25 @@ public class PlayerControls : MonoBehaviour, ITeleportable
 
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    _menuPopUp.SetActive(true);
-                    Cursor.lockState = CursorLockMode.None;
-                    _isMenuOpen = true;
+                    if (_isMenuOpen)
+                    {
+                        _menuPopUp.SetActive(false);
+                        Cursor.lockState = CursorLockMode.Locked;
+                        _isMenuOpen = false;
+                    }
+                    else
+                    {
+                        _menuPopUp.SetActive(true);
+                        Cursor.lockState = CursorLockMode.None;
+                        _isMenuOpen = true;
+                    }
                 }
 
                 if (Input.GetKeyDown(KeyCode.N))
                 {
                     _yandexSDK.ShowRewarded("SkipLvl");
                     _yandexSDK.onRewardedAdReward += SkipLvl;
+                    //StartCoroutine(OnFinishLvl());
                 }
 
                 if (Input.GetKeyDown(KeyCode.Space))
@@ -141,6 +151,24 @@ public class PlayerControls : MonoBehaviour, ITeleportable
                 if (_reflectionDamageImage != null)
                 {
                     _reflectionDamageImage.color = new Color(1, 0, 0, Mathf.Lerp(0f, 0.4f, (float)Normalize((double)_health, 0d, 7d, 1d, 0d)));
+                }
+            }
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (_isMenuOpen)
+                {
+                    _menuPopUp.SetActive(false);
+                    Cursor.lockState = CursorLockMode.Locked;
+                    _isMenuOpen = false;
+                }
+                else
+                {
+                    _menuPopUp.SetActive(true);
+                    Cursor.lockState = CursorLockMode.None;
+                    _isMenuOpen = true;
                 }
             }
         }
@@ -255,7 +283,10 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     private void SkipLvl(string str)
     {
         _yandexSDK.onRewardedAdReward -= SkipLvl;
-        StartCoroutine(OnFinishLvl());
+
+        FinishLvl finishLvl = FindObjectOfType<FinishLvl>();
+        finishLvl.StartFinishLvl();
+        //StartCoroutine(OnFinishLvl());
     }
 
     private IEnumerator OnFinishLvl()

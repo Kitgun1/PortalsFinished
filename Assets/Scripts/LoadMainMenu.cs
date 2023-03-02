@@ -23,8 +23,21 @@ public class LoadMainMenu : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    private IEnumerator OnReloadScene()
+    {
+        LvlTransition.Instance.CloseLvl();
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void Reload()
+    {
+        StartCoroutine(OnReloadScene());
+    }
+
     public void LockCursor()
     {
         _player._isMenuOpen = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }
