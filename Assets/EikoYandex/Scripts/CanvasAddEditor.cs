@@ -29,10 +29,10 @@ namespace Eiko.YaSDK.Editor
         public void CloseReward()
         {
             revarded.SetActive(false);
-            if (keepWaiting)
-                YandexSDK.instance.OnRewardedClose(placement);
-            else
-                YandexSDK.instance.OnRewarded(placement);
+            YandexSDK.instance.OnRewardedClose(placement); 
+            
+            
+                
         }
         public void OpenFullScreen()
         {
@@ -55,6 +55,8 @@ namespace Eiko.YaSDK.Editor
             }
             time.text = "Award received";
             keepWaiting = false;
+            YandexSDK.instance.OnRewarded(placement);
+            Debug.Log("Onrevardet");
         }
         public void ShowReview()
         {

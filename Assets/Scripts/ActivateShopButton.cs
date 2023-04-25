@@ -14,7 +14,7 @@ public class ActivateShopButton : MonoBehaviour
 
         if (YandexSDK.instance.IsFirstOpen)
         {
-            YandexSDK.instance.onInitializeData += Activate;
+            YandexSDK.instance.onDataRecived += Activate;
         }
         else
         {
@@ -22,9 +22,9 @@ public class ActivateShopButton : MonoBehaviour
         }
     }
 
-    public void Activate()
+    public void Activate(GetDataCallback callback)
     {
-        YandexSDK.instance.onInitializeData -= Activate;
+        YandexSDK.instance.onDataRecived -= Activate;
         _btn.onClick.AddListener(OpenShopLayer);
     }
 

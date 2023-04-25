@@ -4,7 +4,7 @@ mergeInto(LibraryManager.library, {
   },
 
   Purchase: function(id) {
-    buy(Pointer_stringify(id));
+    buy(UTF8ToString(id));
   },
 
   AuthenticateUser: function() {
@@ -33,15 +33,13 @@ mergeInto(LibraryManager.library, {
       }
   },
 
-  GetLang: function () {
-    var urlParams = window.location.search.replace( '?', '');
-    var returnStr = new URLSearchParams(urlParams).get("lang");
-    if(!returnStr)returnStr = "ru";
+  GetLang: function() {
+    var returnStr = window.ysdk.environment.i18n.lang;
     var bufferSize = lengthBytesUTF8(returnStr) + 1;
     var buffer = _malloc(bufferSize);
     stringToUTF8(returnStr, buffer, bufferSize);
     return buffer;
-  },
+},
   Review: function () {
     ShowReview();
   },
@@ -54,8 +52,12 @@ mergeInto(LibraryManager.library, {
    SetData: function (key,value) {
        setData(UTF8ToString(key),UTF8ToString(value));
   },
-  GetPurchases: function () {
-    getPurchases();
+  GetPurchases: function()
+{
+getPurchases();
+},
+  SetLeaderBoard: function(value)
+  {
+    SetLeader(value);
   }
-
 });

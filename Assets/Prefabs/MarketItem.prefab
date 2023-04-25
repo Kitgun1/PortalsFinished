@@ -70,10 +70,10 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: f47e2000325e74ae6b4d2f7a570d918c, type: 3}
     m_FontSize: 25
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -918,7 +918,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C"
+  m_Text: Get
 --- !u!114 &7908227765801382664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1176,6 +1176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gunObject: {fileID: 0}
+  _charObject: {fileID: 0}
   _GetButton: {fileID: 7908227765913939261}
   _SetButton: {fileID: 7908227764528222709}
   _SettedLable: {fileID: 7908227765308757982}

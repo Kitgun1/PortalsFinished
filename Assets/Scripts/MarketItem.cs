@@ -6,6 +6,7 @@ using Eiko.YaSDK;
 public class MarketItem : MonoBehaviour
 {
     [SerializeField] private GunObject _gunObject;
+    [SerializeField] private CharacterObject _charObject;
     [SerializeField] private GameObject _GetButton;
     [SerializeField] private GameObject _SetButton;
     [SerializeField] private GameObject _SettedLable;
@@ -14,27 +15,55 @@ public class MarketItem : MonoBehaviour
 
     private void Start()
     {
-        _marketContainer = MarketContainer.Instance;
-        if (!_gunObject.IsTaken)
+        _marketContainer = GetComponentInParent<MarketContainer>();
+        if (_gunObject != null)
         {
-            _GetButton.SetActive(true);
-            _SetButton.SetActive(false);
-            _SettedLable.SetActive(false);
-            _adsCountText.text = _gunObject.AdWatching + "/" + _gunObject.AdToTake;
-        }
-        else
-        {
-            if (YandexPrefs.GetInt("ActiveGun", 0) == _gunObject.GunIndex)
+            if (!_gunObject.IsTaken)
             {
-                _GetButton.SetActive(false);
+                _GetButton.SetActive(true);
                 _SetButton.SetActive(false);
-                _SettedLable.SetActive(true);
+                _SettedLable.SetActive(false);
+                _adsCountText.text = _gunObject.AdWatching + "/" + _gunObject.AdToTake;
             }
             else
             {
-                _GetButton.SetActive(false);
-                _SetButton.SetActive(true);
+                if (YandexPrefs.GetInt("ActiveGun", 0) == _gunObject.GunIndex)
+                {
+                    _GetButton.SetActive(false);
+                    _SetButton.SetActive(false);
+                    _SettedLable.SetActive(true);
+                }
+                else
+                {
+                    _GetButton.SetActive(false);
+                    _SetButton.SetActive(true);
+                    _SettedLable.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            if (!_charObject.IsTaken)
+            {
+                _GetButton.SetActive(true);
+                _SetButton.SetActive(false);
                 _SettedLable.SetActive(false);
+                _adsCountText.text = YandexPrefs.GetInt("Cakes", 0) + "/" + _charObject.CakesToTake;
+            }
+            else
+            {
+                if (YandexPrefs.GetInt("ActiveChar", 0) == _charObject.CharIndex)
+                {
+                    _GetButton.SetActive(false);
+                    _SetButton.SetActive(false);
+                    _SettedLable.SetActive(true);
+                }
+                else
+                {
+                    _GetButton.SetActive(false);
+                    _SetButton.SetActive(true);
+                    _SettedLable.SetActive(false);
+                }
             }
         }
     }
@@ -61,6 +90,18 @@ public class MarketItem : MonoBehaviour
         YandexSDK.instance.onRewardedAdClosed -= StopAd;
     }
 
+    public void GetChar()
+    {
+        if (YandexPrefs.GetInt("Cakes", 0) >= _charObject.CakesToTake)
+        {
+            YandexPrefs.SetInt("CharTaken" + _charObject.CharIndex, 1);
+            _charObject.IsTaken = true;
+            _GetButton.SetActive(false);
+            _SetButton.SetActive(true);
+            _SettedLable.SetActive(false);
+        }
+    }
+
     public void GetGun(string str)
     {
         YandexSDK.instance.onRewardedAdReward -= GetGun;
@@ -82,6 +123,21 @@ public class MarketItem : MonoBehaviour
         }
     }
 
+    public void SetChar()
+    {
+        MarketItem[] items = _marketContainer._items;
+
+        foreach (var item in items)
+        {
+            item.Disable();
+        }
+
+        YandexPrefs.SetInt("ActiveChar", _charObject.CharIndex);
+        _GetButton.SetActive(false);
+        _SetButton.SetActive(false);
+        _SettedLable.SetActive(true);
+    }
+
     public void SetGun()
     {
         MarketItem[] items = _marketContainer._items;
@@ -99,18 +155,35 @@ public class MarketItem : MonoBehaviour
 
     public void Disable()
     {
-        if (!_gunObject.IsTaken)
+        if (_gunObject != null)
         {
-            _GetButton.SetActive(true);
-            _SetButton.SetActive(false);
-            _SettedLable.SetActive(false);
-            _adsCountText.text = _gunObject.AdWatching + "/" + _gunObject.AdToTake;
+            if (!_gunObject.IsTaken)
+            {
+                _GetButton.SetActive(true);
+                _SetButton.SetActive(false);
+                _SettedLable.SetActive(false);
+            }
+            else
+            {
+                _GetButton.SetActive(false);
+                _SetButton.SetActive(true);
+                _SettedLable.SetActive(false);
+            }
         }
         else
         {
-            _GetButton.SetActive(false);
-            _SetButton.SetActive(true);
-            _SettedLable.SetActive(false);
+            if (!_charObject.IsTaken)
+            {
+                _GetButton.SetActive(true);
+                _SetButton.SetActive(false);
+                _SettedLable.SetActive(false);
+            }
+            else
+            {
+                _GetButton.SetActive(false);
+                _SetButton.SetActive(true);
+                _SettedLable.SetActive(false);
+            }
         }
     }
 }

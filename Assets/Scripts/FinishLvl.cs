@@ -14,6 +14,7 @@ public class FinishLvl : MonoBehaviour
     public bool _canLoadLvl;
     public GunObject gunObject;
     public RewardedPanel rewardedPanel;
+    public Outline outline;
 
     private void Start()
     {
@@ -30,6 +31,7 @@ public class FinishLvl : MonoBehaviour
             {
                 _audio.Play();
                 _finishParticle.Play();
+                other.GetComponent<PlayerControls>().End();
                 StartCoroutine(OnFinishLvl());
             }
         }
@@ -45,18 +47,26 @@ public class FinishLvl : MonoBehaviour
         _canLoadLvl = true;
     }
 
+    public void EnableWallHack()
+    {
+        outline.OutlineMode = Outline.Mode.OutlineAndSilhouette;
+    }
+
     private IEnumerator OnFinishLvl()
     {
         yield return new WaitForSeconds(1.5f);
 
         if (_yandex != null)
         {
-            _yandex.ShowInterstitial();
+            if (YandexPrefs.GetInt("IsAd", 0) == 0)
+            {
+                _yandex.ShowInterstitial();
+            }
         }
 
         YandexPrefs.SetInt("CompleteLvl" + SceneManager.GetActiveScene().buildIndex, 1);
 
-        if (_isRewardedLvl)
+        if (_isRewardedLvl && !gunObject.IsTaken && gunObject != null)
         {
             rewardedPanel.gameObject.SetActive(true);
             rewardedPanel.OpenPanel(gunObject, this);

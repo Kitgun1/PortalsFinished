@@ -8,10 +8,24 @@ public class GunLoader : MonoBehaviour
 
     private void Start()
     {
-        YandexSDK.instance.onInitializeData += Load;
+        if (YandexSDK.instance.IsFirstOpen)
+        {
+            YandexSDK.instance.onDataRecived += Load;
+        }
+        else
+        {
+            foreach (var item in _gunObjects)
+            {
+                if (!item.IsTaken)
+                {
+                    item.IsTaken = YandexPrefs.GetInt("GunTaken" + item.GunIndex, 0) == 0 ? false : true;
+                    item.AdWatching = YandexPrefs.GetInt("GunAdWatched" + item.GunIndex, 0);
+                }
+            }
+        }
     }
 
-    private void Load()
+    private void Load(GetDataCallback callback)
     {
         foreach (var item in _gunObjects)
         {
@@ -21,6 +35,6 @@ public class GunLoader : MonoBehaviour
                 item.AdWatching = YandexPrefs.GetInt("GunAdWatched" + item.GunIndex, 0);
             }
         }
-        YandexSDK.instance.onInitializeData -= Load;
+        YandexSDK.instance.onDataRecived -= Load;
     }
 }

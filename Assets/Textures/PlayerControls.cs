@@ -35,6 +35,14 @@ public class PlayerControls : MonoBehaviour, ITeleportable
 
     [SerializeField] private Animator _animator;
 
+    public Animator animator
+    {
+        set
+        {
+            _animator = value;
+        }
+    }
+
     private YandexSDK _yandexSDK;
 
     [SerializeField] private Image _reflectionDamageImage;
@@ -86,6 +94,11 @@ public class PlayerControls : MonoBehaviour, ITeleportable
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
+    }
+
+    public void End()
+    {
+        _canvas.End();
     }
 
     void Update()

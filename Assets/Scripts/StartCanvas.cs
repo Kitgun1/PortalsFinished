@@ -10,7 +10,7 @@ public class StartCanvas : MonoBehaviour
     {
         if (YandexSDK.instance.IsFirstOpen)
         {
-            YandexSDK.instance.onInitializeData += WaitToInitYandex;
+            YandexSDK.instance.onDataRecived += WaitToInitYandex;
         }
         else
         {
@@ -18,9 +18,9 @@ public class StartCanvas : MonoBehaviour
         }
     }
 
-    private void WaitToInitYandex()
+    private void WaitToInitYandex(GetDataCallback callback)
     {
         _PlayBtn.interactable = true;
-        YandexSDK.instance.onInitializeData -= WaitToInitYandex;
+        YandexSDK.instance.onDataRecived -= WaitToInitYandex;
     }
 }

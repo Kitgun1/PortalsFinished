@@ -13,11 +13,12 @@ TagManager:
   - Joystick
   - CameraJoystick
   - Dead
+  - Indicator
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Indicator
   - Water
   - UI
   - 

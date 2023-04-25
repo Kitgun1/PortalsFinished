@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MarketContainer : Singletone<MarketContainer>
+public class MarketContainer : MonoBehaviour
 {
     public MarketItem[] _items;
 

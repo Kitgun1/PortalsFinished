@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -12,6 +11,7 @@ public class LvlItem : MonoBehaviour
     [SerializeField] private GameObject _lock;
     [SerializeField] private Text _text;
     [SerializeField] private bool _isTitorial;
+    [SerializeField] private Text _timerText;
 
     private void Start()
     {
@@ -31,6 +31,14 @@ public class LvlItem : MonoBehaviour
                 _lvlButton.interactable = false;
                 _lock.SetActive(true);
             }
+        }
+        if (YandexPrefs.GetInt("CompleteLvl" + _sceneIndex) == 1)
+        {
+            _timerText.text = YandexPrefs.GetString("LvlTimer" + _sceneIndex, "00:00");
+        }
+        else
+        {
+            _timerText.gameObject.SetActive(false);
         }
     }
 
