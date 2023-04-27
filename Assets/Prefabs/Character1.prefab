@@ -113,7 +113,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1456368557979482309}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0.06, y: 0.66, z: 3.6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5669, y: 0.5669, z: 0.5669}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -153,8 +153,8 @@ MonoBehaviour:
   _menuPopUp: {fileID: 0}
   _animator: {fileID: 6710002565473707337}
   _reflectionDamageImage: {fileID: 0}
-  _isMenuOpen: 0
-  _isMobile: 0
+  IsMenuOpen: 0
+  IsMobile: 0
 --- !u!114 &7440043477831567062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,6 +176,9 @@ MonoBehaviour:
   _mask:
     serializedVersion: 2
     m_Bits: 122551
+  _maskForBoxCast:
+    serializedVersion: 2
+    m_Bits: 5121
 --- !u!54 &1015483043946458008
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -257,7 +260,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2947720988951035787}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3999882, y: 0.1400001, z: 2}
+  m_LocalPosition: {x: 0, y: 0.4, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -289,7 +292,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4621666046858125798}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.985, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -336,7 +339,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6041144731365112779}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -464,7 +467,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6091247073379201556}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.985, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -513,7 +516,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6186523911607869768}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.57, z: -0.052}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -544,7 +547,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 1000
+  far clip plane: 300
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1820,27 +1823,27 @@ PrefabInstance:
     - target: {fileID: 5800020748117999280, guid: 7e4119d9e0a2b4c488c360b899fea7ab,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.17499982
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5800020748117999280, guid: 7e4119d9e0a2b4c488c360b899fea7ab,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9396927
       objectReference: {fileID: 0}
     - target: {fileID: 5800020748117999280, guid: 7e4119d9e0a2b4c488c360b899fea7ab,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5800020748117999280, guid: 7e4119d9e0a2b4c488c360b899fea7ab,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.3420201
       objectReference: {fileID: 0}
     - target: {fileID: 5800020748117999280, guid: 7e4119d9e0a2b4c488c360b899fea7ab,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5800020748117999280, guid: 7e4119d9e0a2b4c488c360b899fea7ab,
         type: 3}
@@ -1850,7 +1853,7 @@ PrefabInstance:
     - target: {fileID: 5800020748117999280, guid: 7e4119d9e0a2b4c488c360b899fea7ab,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5800020748117999280, guid: 7e4119d9e0a2b4c488c360b899fea7ab,
         type: 3}

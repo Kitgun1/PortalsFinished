@@ -768,6 +768,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6163359347840977670, guid: 6fdb0d80c911f4629a46fe855122d465,
+        type: 3}
+      propertyPath: far clip plane
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 6163359347840977670, guid: 6fdb0d80c911f4629a46fe855122d465,
+        type: 3}
+      propertyPath: near clip plane
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 6163359349190138466, guid: 6fdb0d80c911f4629a46fe855122d465,
         type: 3}
       propertyPath: m_RootOrder
@@ -2059,6 +2069,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2033805127779155701, guid: 200c475c54ec30649adae8b88965f830,
+        type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 2376567627279750805, guid: 200c475c54ec30649adae8b88965f830,
         type: 3}
       propertyPath: m_RootOrder
@@ -2257,6 +2272,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 2033805127779155701, guid: 200c475c54ec30649adae8b88965f830,
+        type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 2376567627279750805, guid: 200c475c54ec30649adae8b88965f830,
         type: 3}

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Singletone<T> : MonoBehaviour where T : MonoBehaviour 
+public class Singletone<T> : MonoBehaviour where T : MonoBehaviour
 {
     static T m_instance;
     [SerializeField] private bool _dontDestroy;
@@ -19,6 +19,7 @@ public class Singletone<T> : MonoBehaviour where T : MonoBehaviour
                     m_instance = singleton.AddComponent<T>();
                 }
             }
+
             return m_instance;
         }
     }
@@ -33,6 +34,7 @@ public class Singletone<T> : MonoBehaviour where T : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
         if (_dontDestroy)
         {
             DontDestroyOnLoad(gameObject);

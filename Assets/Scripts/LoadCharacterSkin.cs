@@ -15,7 +15,7 @@ public class LoadCharacterSkin : MonoBehaviour
             if (YandexPrefs.GetInt("ActiveChar", 0) == item.characterObject.CharIndex)
             {
                 item.gameObject.SetActive(true);
-                _playerControls.animator = item.animator;
+                _playerControls.Animator = item.animator;
             }
             else
             {

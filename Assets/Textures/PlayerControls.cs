@@ -14,46 +14,35 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     public float forceout;
     private float _startHeath;
     [SerializeField] float _health;
-
     [SerializeField] float _takeDistance;
 
     private Rigidbody _rigidbody;
     public Transform playerCamera;
-
     private bool _isTeleported;
 
     [SerializeField] private GameObject _placeForCatch;
     private bool _isCarring;
 
     [SerializeField] private ParticleSystem _carringEffect;
-
     private bool _isGrounded;
 
     [SerializeField] private AudioSource _carringSound;
-
     [SerializeField] private GameObject _menuPopUp;
-
     [SerializeField] private Animator _animator;
 
-    public Animator animator
+    public Animator Animator
     {
-        set
-        {
-            _animator = value;
-        }
+        set => _animator = value;
     }
 
     private YandexSDK _yandexSDK;
 
     [SerializeField] private Image _reflectionDamageImage;
 
-    public bool _isMenuOpen;
-
+    public bool IsMenuOpen;
     private bool _isJumpPressed = false;
-
     private bool _isDead;
-
-    public bool _isMobile;
+    public bool IsMobile;
 
     private Joystick _joystick;
     private Joystick _cameraJoystick;
@@ -79,18 +68,18 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        
+
         LvlTransition.Instance.OpenLvl();
         _yandexSDK = YandexSDK.instance;
         _startHeath = _health;
         rotateSpeed = PlayerPrefs.GetFloat("PlayerSensitivity", 4);
 
-        _isMobile = GetComponent<CheckWebGLPlatform>().CheckIfMobile();
+        IsMobile = GetComponent<CheckWebGLPlatform>().CheckIfMobile();
         _canvas = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<MainCanvas>();
         _joystick = _canvas.joystick;
         _cameraJoystick = _canvas.CameraJoystick;
         _collider = _canvas._collider;
-        if (!_isMobile)
+        if (!IsMobile)
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -103,9 +92,9 @@ public class PlayerControls : MonoBehaviour, ITeleportable
 
     void Update()
     {
-        if (!_isMenuOpen)
+        if (!IsMenuOpen)
         {
-            if (!_isMobile)
+            if (!IsMobile)
             {
                 MouseRotation();
 
@@ -123,17 +112,17 @@ public class PlayerControls : MonoBehaviour, ITeleportable
 
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    if (_isMenuOpen)
+                    if (IsMenuOpen)
                     {
                         _menuPopUp.SetActive(false);
                         Cursor.lockState = CursorLockMode.Locked;
-                        _isMenuOpen = false;
+                        IsMenuOpen = false;
                     }
                     else
                     {
                         _menuPopUp.SetActive(true);
                         Cursor.lockState = CursorLockMode.None;
-                        _isMenuOpen = true;
+                        IsMenuOpen = true;
                     }
                 }
 
@@ -153,7 +142,7 @@ public class PlayerControls : MonoBehaviour, ITeleportable
             {
                 //if (_canvas._collider.bounds.Contains(Input.mousePosition))
                 //{
-                    //MobileRotation();
+                //MobileRotation();
                 //}
             }
 
@@ -163,7 +152,8 @@ public class PlayerControls : MonoBehaviour, ITeleportable
 
                 if (_reflectionDamageImage != null)
                 {
-                    _reflectionDamageImage.color = new Color(1, 0, 0, Mathf.Lerp(0f, 0.4f, (float)Normalize((double)_health, 0d, 7d, 1d, 0d)));
+                    _reflectionDamageImage.color = new Color(1, 0, 0,
+                        Mathf.Lerp(0f, 0.4f, (float)Normalize((double)_health, 0d, 7d, 1d, 0d)));
                 }
             }
         }
@@ -171,17 +161,17 @@ public class PlayerControls : MonoBehaviour, ITeleportable
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (_isMenuOpen)
+                if (IsMenuOpen)
                 {
                     _menuPopUp.SetActive(false);
                     Cursor.lockState = CursorLockMode.Locked;
-                    _isMenuOpen = false;
+                    IsMenuOpen = false;
                 }
                 else
                 {
                     _menuPopUp.SetActive(true);
                     Cursor.lockState = CursorLockMode.None;
-                    _isMenuOpen = true;
+                    IsMenuOpen = true;
                 }
             }
         }
@@ -219,7 +209,7 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     {
         _menuPopUp.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
-        _isMenuOpen = true;
+        IsMenuOpen = true;
     }
 
     public void SkipLvlN()
@@ -259,7 +249,9 @@ public class PlayerControls : MonoBehaviour, ITeleportable
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                if ((hit.collider.gameObject.layer == 14 || hit.collider.gameObject.layer == 7 || hit.collider.gameObject.layer == 17) && Vector3.Distance(hit.collider.transform.position, transform.position) <= _takeDistance)
+                if ((hit.collider.gameObject.layer == 14 || hit.collider.gameObject.layer == 7 ||
+                     hit.collider.gameObject.layer == 17) &&
+                    Vector3.Distance(hit.collider.transform.position, transform.position) <= _takeDistance)
                 {
                     Debug.Log(Vector3.Distance(hit.collider.transform.position, transform.position));
                     hit.collider.transform.SetParent(_placeForCatch.transform);
@@ -326,7 +318,7 @@ public class PlayerControls : MonoBehaviour, ITeleportable
         MovementLogic();
         if (_isJumpPressed) JumpLogic();
 
-        if (_isMobile) MobileRotation();
+        if (IsMobile) MobileRotation();
     }
 
     private void MovementLogic()
@@ -334,7 +326,7 @@ public class PlayerControls : MonoBehaviour, ITeleportable
         float moveHorizontal = 0, moveVertical = 0;
 
 
-        if (_isMobile)
+        if (IsMobile)
         {
             if (!_canvas._collider.bounds.Contains(Input.mousePosition))
             {
@@ -348,7 +340,7 @@ public class PlayerControls : MonoBehaviour, ITeleportable
 
             moveVertical = Input.GetAxisRaw("Vertical");
         }
-        
+
 
         if (Mathf.Abs(moveHorizontal) > 0 || Mathf.Abs(moveVertical) > 0)
         {
@@ -360,13 +352,15 @@ public class PlayerControls : MonoBehaviour, ITeleportable
         }
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        
+
         movement = transform.TransformDirection(movement);
 
         if (Mathf.Abs(_rigidbody.velocity.x) >= MaxSpeed || Mathf.Abs(_rigidbody.velocity.z) >= MaxSpeed) return;
 
         //_rigidbody.AddForce(movement * speed, ForceMode.Force);
-        _rigidbody.velocity = transform.TransformDirection(new Vector3(moveHorizontal * speed, _rigidbody.velocity.y, moveVertical * speed));
+        _rigidbody.velocity =
+            transform.TransformDirection(new Vector3(moveHorizontal * speed, _rigidbody.velocity.y,
+                moveVertical * speed));
     }
 
     private void JumpLogic()
@@ -430,24 +424,25 @@ public class PlayerControls : MonoBehaviour, ITeleportable
             _isDead = true;
             StartCoroutine(OnReLoadScene());
         }
+
         _rigidbody.AddForce((transform.position - damagePoint.position) * force, ForceMode.Force);
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, _takeDistance);
+        //Gizmos.DrawWireSphere(transform.position, _takeDistance);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Dead")
+        if (other.CompareTag("Dead"))
         {
             StartCoroutine(OnReLoadScene());
         }
     }
 
-    double Normalize(double val, double valmin, double valmax, double min, double max)
+    double Normalize(double val, double valMin, double valMax, double min, double max)
     {
-        return (((val - valmin) / (valmax - valmin)) * (max - min)) + min;
+        return (((val - valMin) / (valMax - valMin)) * (max - min)) + min;
     }
 }

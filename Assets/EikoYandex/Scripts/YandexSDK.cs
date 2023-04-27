@@ -156,7 +156,7 @@ namespace Eiko.YaSDK
         {
             if (addsAvailable)
             {
-                AppMetricaWeb.Event("otherAd");
+                //AppMetricaWeb.Event("otherAd");
                 StartCoroutine(WaitAddReload());
 #if !UNITY_EDITOR && UNITY_WEBGL
                 ShowFullscreenAd();

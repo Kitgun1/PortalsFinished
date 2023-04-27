@@ -37,7 +37,7 @@ public class LoadMainMenu : MonoBehaviour
 
     public void LockCursor()
     {
-        _player._isMenuOpen = false;
+        _player.IsMenuOpen = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 }

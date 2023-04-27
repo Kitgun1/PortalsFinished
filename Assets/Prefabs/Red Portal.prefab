@@ -177,8 +177,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 3.5629942, z: 0.7940802}
-  m_Center: {x: 0, y: 0.00000043753278, z: -0.102958575}
+  m_Size: {x: 1.999999, y: 3.562994, z: 0.7940802}
+  m_Center: {x: 0.000000546916, y: 0.00000043753278, z: -0.102958575}
 --- !u!1 &8916111060668689714
 GameObject:
   m_ObjectHideFlags: 0
@@ -14964,7 +14964,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
