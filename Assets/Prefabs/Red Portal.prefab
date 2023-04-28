@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6747391124164806483
 Transform:
   m_ObjectHideFlags: 0
@@ -61,7 +61,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8093118916739442558
 Transform:
   m_ObjectHideFlags: 0
@@ -119,7 +119,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8916111060400900716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.09, y: 1.98, z: -11.8}
+  m_LocalPosition: {x: 0, y: 0, z: 0.25}
   m_LocalScale: {x: 0.5449159, y: 0.5449159, z: 0.5449159}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04faa257e441a4ac6a25c9c06409280b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ColliderChecker: {fileID: 8916111060400900713}
   Other: {fileID: 0}
   PortalView: {fileID: 8916111061998766146}
 --- !u!114 &8916111060400900714
@@ -177,8 +178,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.999999, y: 3.562994, z: 0.7940802}
-  m_Center: {x: 0.000000546916, y: 0.00000043753278, z: -0.102958575}
+  m_Size: {x: 1.999999, y: 3.562994, z: 0.16938616}
+  m_Center: {x: 0.000000546916, y: 0.00000043753278, z: -0.24939765}
 --- !u!1 &8916111060668689714
 GameObject:
   m_ObjectHideFlags: 0

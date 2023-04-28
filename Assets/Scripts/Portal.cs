@@ -2,6 +2,7 @@
 
 public class Portal : MonoBehaviour
 {
+    public BoxCollider ColliderChecker;
     public Portal Other;
     public Camera PortalView;
     private Vector3 _startPosition;
@@ -14,7 +15,7 @@ public class Portal : MonoBehaviour
         GetComponentInChildren<MeshRenderer>().sharedMaterial.mainTexture = Other.PortalView.targetTexture;
         _startPosition = transform.position;
     }
-    
+
     private void Update()
     {
         // Position
@@ -23,7 +24,8 @@ public class Portal : MonoBehaviour
         PortalView.transform.localPosition = lookerPosition;
 
         // Rotation
-        Quaternion difference = transform.rotation * Quaternion.Inverse(Other.transform.rotation * Quaternion.Euler(0,180,0));
+        Quaternion difference = transform.rotation *
+                                Quaternion.Inverse(Other.transform.rotation * Quaternion.Euler(0, 180, 0));
         PortalView.transform.rotation = difference * _camera.transform.rotation;
 
         // Clipping
