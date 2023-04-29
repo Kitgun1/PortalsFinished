@@ -2683,7 +2683,7 @@ MonoBehaviour:
   _player: {fileID: 0}
   _damage: 0.4
   _fireDelay: 0.2
-  _fireDistance: 0
+  _fireDistance: 25
   _fire: {fileID: 2515134243796605341}
   _explosion: {fileID: 5495397214059813442}
   _turretType: 1

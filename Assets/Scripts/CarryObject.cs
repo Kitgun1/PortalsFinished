@@ -8,9 +8,17 @@ public class CarryObject : MonoBehaviour
     public Transform ParentObject;
     private Rigidbody _rigidbody;
 
+    private Vector3 _defaultPosition;
+    private Quaternion _defaultRotation;
+
+    private float _delayCheck = 3;
+    private float _time;
+
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _defaultPosition = transform.position;
+        _defaultRotation = transform.rotation;
     }
 
     private void Update()
@@ -19,6 +27,25 @@ public class CarryObject : MonoBehaviour
         {
             transform.position = ParentObject.position;
         }
+        else
+        {
+            _time += Time.deltaTime;
+            if (_time >= _delayCheck)
+            {
+                if (transform.position.y < -10)
+                {
+                    ResetTransform();
+                }
+
+                _time = 0;
+            }
+        }
+    }
+
+    public void ResetTransform()
+    {
+        transform.position = _defaultPosition;
+        transform.rotation = _defaultRotation;
     }
 
     public void SetCarry(Transform parent)
