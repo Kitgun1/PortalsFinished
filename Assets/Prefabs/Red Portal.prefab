@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6747391124164806483
 Transform:
   m_ObjectHideFlags: 0
@@ -43,7 +43,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4, y: 3.23, z: 0.32}
+  m_Size: {x: 4, y: 3.094532, z: 0.08}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6721765354887494762
 GameObject:
@@ -61,7 +61,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8093118916739442558
 Transform:
   m_ObjectHideFlags: 0
@@ -88,7 +88,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.97, y: 7.42, z: 0.32}
+  m_Size: {x: 1.749113, y: 6.431955, z: 0.08}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8916111060400900716
 GameObject:
@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 8916111060400900715}
   - component: {fileID: 8916111060400900714}
   - component: {fileID: 8916111060400900713}
+  - component: {fileID: 306912963422942205}
   m_Layer: 0
   m_Name: Red Portal
   m_TagString: Untagged
@@ -119,7 +120,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8916111060400900716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.25}
   m_LocalScale: {x: 0.5449159, y: 0.5449159, z: 0.5449159}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -149,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04faa257e441a4ac6a25c9c06409280b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ColliderChecker: {fileID: 8916111060400900713}
+  ColliderChecker: {fileID: 306912963422942205}
   Other: {fileID: 0}
   PortalView: {fileID: 8916111061998766146}
 --- !u!114 &8916111060400900714
@@ -178,8 +179,21 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.999999, y: 3.562994, z: 0.16938616}
-  m_Center: {x: 0.000000546916, y: 0.00000043753278, z: -0.24939765}
+  m_Size: {x: 1.8577478, y: 3.2784903, z: 0.05}
+  m_Center: {x: 0.0054716757, y: 0.010942586, z: -0.39585865}
+--- !u!65 &306912963422942205
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916111060400900716}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.75, y: 3.16, z: 1.0048772}
+  m_Center: {x: 0.0054716757, y: 0.010942586, z: 0.15743944}
 --- !u!1 &8916111060668689714
 GameObject:
   m_ObjectHideFlags: 0
@@ -9949,7 +9963,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8916111060956387338}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.05}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14966,7 +14980,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 1000
+  far clip plane: 300
   field of view: 60
   orthographic: 0
   orthographic size: 5

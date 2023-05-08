@@ -196,6 +196,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Finish
       objectReference: {fileID: 0}
+    - target: {fileID: 4559976173494000141, guid: 3c26bc239b7faff4bb2954ad7e57801d,
+        type: 3}
+      propertyPath: gunObject
+      value: 
+      objectReference: {fileID: 11400000, guid: fa2e49b5000d04a6eab61bcb8ab317e0,
+        type: 2}
+    - target: {fileID: 4559976173494000141, guid: 3c26bc239b7faff4bb2954ad7e57801d,
+        type: 3}
+      propertyPath: rewardedPanel
+      value: 
+      objectReference: {fileID: 2034581007}
+    - target: {fileID: 4559976173494000141, guid: 3c26bc239b7faff4bb2954ad7e57801d,
+        type: 3}
+      propertyPath: _isRewardedLvl
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c26bc239b7faff4bb2954ad7e57801d, type: 3}
 --- !u!4 &113869464 stripped
@@ -1172,6 +1188,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9128625345244355328, guid: 370e2b7bc4e6d4f28b680ce5c2275a3d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 370e2b7bc4e6d4f28b680ce5c2275a3d, type: 3}
 --- !u!114 &1076627252 stripped
@@ -1813,6 +1834,18 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 1025263166}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1788111984 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4559976173494000141, guid: 3c26bc239b7faff4bb2954ad7e57801d,
+    type: 3}
+  m_PrefabInstance: {fileID: 113869463}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ec51d70e24264ecb91b4931885207f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1853231122 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8916111060400900714, guid: 298cf5402b4a44ca29b9ee722ae17d77,
@@ -2159,6 +2192,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.0000002, y: 1, z: 6.123235e-17}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2034581007 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4465175132412935877, guid: b863740ff34d04b76835e4ae35499733,
+    type: 3}
+  m_PrefabInstance: {fileID: 161568373129738945}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66c16b606d0e747e0b17c33373f59a48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2047795701
 GameObject:
   m_ObjectHideFlags: 0
@@ -2607,6 +2652,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1165377084640042395, guid: b863740ff34d04b76835e4ae35499733,
+        type: 3}
+      propertyPath: _finishLvl
+      value: 
+      objectReference: {fileID: 1788111984}
     - target: {fileID: 1165377084640042395, guid: b863740ff34d04b76835e4ae35499733,
         type: 3}
       propertyPath: _gunObject

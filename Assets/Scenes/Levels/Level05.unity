@@ -772,9 +772,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4559976173494000141, guid: 3c26bc239b7faff4bb2954ad7e57801d,
         type: 3}
+      propertyPath: gunObject
+      value: 
+      objectReference: {fileID: 11400000, guid: b11263dba705d4999b118c7f6cd4ff20,
+        type: 2}
+    - target: {fileID: 4559976173494000141, guid: 3c26bc239b7faff4bb2954ad7e57801d,
+        type: 3}
       propertyPath: rewardedPanel
       value: 
       objectReference: {fileID: 1887940140}
+    - target: {fileID: 4559976173494000141, guid: 3c26bc239b7faff4bb2954ad7e57801d,
+        type: 3}
+      propertyPath: _isRewardedLvl
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c26bc239b7faff4bb2954ad7e57801d, type: 3}
 --- !u!4 &423327593 stripped
@@ -2704,7 +2715,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _gunObject
       value: 
-      objectReference: {fileID: 11400000, guid: fa2e49b5000d04a6eab61bcb8ab317e0,
+      objectReference: {fileID: 11400000, guid: b11263dba705d4999b118c7f6cd4ff20,
         type: 2}
     - target: {fileID: 1225349272760975338, guid: b863740ff34d04b76835e4ae35499733,
         type: 3}
@@ -2831,6 +2842,12 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8748462929609189342, guid: b863740ff34d04b76835e4ae35499733,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ac316c4ef2b5643758f7c76a00ac00bb,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b863740ff34d04b76835e4ae35499733, type: 3}
 --- !u!1 &1887940139 stripped

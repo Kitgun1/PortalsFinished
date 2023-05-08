@@ -7,6 +7,7 @@ public class MarketItem : MonoBehaviour
 {
     [SerializeField] private GunObject _gunObject;
     [SerializeField] private CharacterObject _charObject;
+    [SerializeField] private BibelotObject _bibelotObject;
     [SerializeField] private GameObject _GetButton;
     [SerializeField] private GameObject _SetButton;
     [SerializeField] private GameObject _SettedLable;
@@ -41,7 +42,7 @@ public class MarketItem : MonoBehaviour
                 }
             }
         }
-        else
+        else if (_charObject != null)
         {
             if (!_charObject.IsTaken)
             {
@@ -66,6 +67,31 @@ public class MarketItem : MonoBehaviour
                 }
             }
         }
+        else if (_bibelotObject != null)
+        {
+            if (!_bibelotObject.IsTaken)
+            {
+                _GetButton.SetActive(true);
+                _SetButton.SetActive(false);
+                _SettedLable.SetActive(false);
+                _adsCountText.text = _bibelotObject.Janov.ToString();
+            }
+            else
+            {
+                if (YandexPrefs.GetInt("ActiveBibelot", -1) == _bibelotObject.BibelotIndex)
+                {
+                    _GetButton.SetActive(false);
+                    _SetButton.SetActive(false);
+                    _SettedLable.SetActive(true);
+                }
+                else
+                {
+                    _GetButton.SetActive(false);
+                    _SetButton.SetActive(true);
+                    _SettedLable.SetActive(false);
+                }
+            }
+        }
     }
 
     public void WatchAdForGun()
@@ -74,6 +100,13 @@ public class MarketItem : MonoBehaviour
         YandexSDK.instance.onRewardedAdReward += GetGun;
         //YandexSDK.instance.onRewardedAdError += StopAd;
         //YandexSDK.instance.onRewardedAdClosed += StopAd;
+    }
+
+    public void BuyForBibelot(string id)
+    {
+        // buy gun
+        YandexSDK.instance.onPurchaseSuccess += GetBibelot;
+        YandexSDK.instance.ProcessPurchase(id);
     }
 
     public void StopAd(int num)
@@ -123,6 +156,20 @@ public class MarketItem : MonoBehaviour
         }
     }
 
+    public void GetBibelot(Purchase purchase)
+    {
+        print($"{purchase.purchaseToken} ~~~ {purchase.productID}!~!!!");
+
+        _adsCountText.text = _bibelotObject.Janov.ToString();
+        YandexPrefs.SetInt("BibelotTaken" + _bibelotObject.BibelotIndex, 1);
+        _bibelotObject.IsTaken = true;
+        _GetButton.SetActive(false);
+        _SetButton.SetActive(true);
+        _SettedLable.SetActive(false);
+        //print($"{_GetButton.activeSelf} ~ {_SetButton.activeSelf} ~ {_SettedLable.activeSelf}");
+        YandexSDK.instance.onPurchaseSuccess -= GetBibelot;
+    }
+
     public void SetChar()
     {
         MarketItem[] items = _marketContainer._items;
@@ -153,7 +200,22 @@ public class MarketItem : MonoBehaviour
         _SettedLable.SetActive(true);
     }
 
-    public void Disable()
+    public void SetBibelot()
+    {
+        MarketItem[] items = _marketContainer._items;
+
+        foreach (var item in items)
+        {
+            item.Disable();
+        }
+
+        YandexPrefs.SetInt("ActiveBibelot", _bibelotObject.BibelotIndex);
+        _GetButton.SetActive(false);
+        _SetButton.SetActive(false);
+        _SettedLable.SetActive(true);
+    }
+
+    private void Disable()
     {
         if (_gunObject != null)
         {
@@ -170,9 +232,24 @@ public class MarketItem : MonoBehaviour
                 _SettedLable.SetActive(false);
             }
         }
-        else
+        else if (_charObject != null)
         {
             if (!_charObject.IsTaken)
+            {
+                _GetButton.SetActive(true);
+                _SetButton.SetActive(false);
+                _SettedLable.SetActive(false);
+            }
+            else
+            {
+                _GetButton.SetActive(false);
+                _SetButton.SetActive(true);
+                _SettedLable.SetActive(false);
+            }
+        }
+        else if (_bibelotObject != null)
+        {
+            if (!_bibelotObject.IsTaken)
             {
                 _GetButton.SetActive(true);
                 _SetButton.SetActive(false);

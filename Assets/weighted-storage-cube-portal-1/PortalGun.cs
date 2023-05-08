@@ -33,33 +33,68 @@ public class PortalGun : MonoBehaviour
             if (hit.collider.gameObject.layer != 12) return;
             Quaternion lastRotation = Blue.transform.rotation;
             Vector3 lastPosition = Blue.transform.position;
-
             Transform blueTransform;
             (blueTransform = Blue.transform).rotation = Quaternion.LookRotation(hit.normal);
             blueTransform.position = hit.point + blueTransform.forward * 0.3f;
             OffPortalOnMove portalPlace = hit.collider.GetComponent<OffPortalOnMove>();
             if (portalPlace != null) portalPlace.portal = Blue;
 
-            _corners = GetPortalCorners(Blue);
-            Blue.ColliderChecker.enabled = false;
-
-            var obstacles = IsAllObstacleBehind(Blue);
-            bool isAllObstacleBehind = obstacles.Item1;
-
-            bool isObstacleForward = IsObstacleForward(Blue);
-            // если что-то мешает, возвращаем назад
-            if (!isAllObstacleBehind || isObstacleForward)
+            for (int i = 0; i < 40; i++)
             {
-                (blueTransform = Blue.transform).rotation = lastRotation;
-                blueTransform.position = lastPosition;
-                _BlueParticle.Play();
-                _portalShootSound.Play();
+                _corners = GetPortalCorners(Blue);
+                Blue.ColliderChecker.enabled = false;
+
+                var obstacles = IsAllObstacleBehind(Blue);
+                bool isAllObstacleBehind = obstacles.Item1;
+                bool isObstacleForward = IsObstacleForward(Blue);
+
+
+                if (obstacles.Item2.Item2.Length == 4)
+                {
+                    (blueTransform = Blue.transform).rotation = lastRotation;
+                    blueTransform.position = lastPosition;
+                    Blue.ColliderChecker.enabled = true;
+                    break;
+                }
+
+                if (isAllObstacleBehind && !isObstacleForward)
+                {
+                    break;
+                }
+
+                if (isObstacleForward) // спереди что-то есть => возвращаем назад
+                {
+                    (blueTransform = Blue.transform).rotation = lastRotation;
+                    blueTransform.position = lastPosition;
+                    Blue.ColliderChecker.enabled = true;
+                    break;
+                }
+
+                // взади чего-то нет && нет препятсвий спереди => двигаем
+                if (!isAllObstacleBehind && !isObstacleForward)
+                {
+                    int[] indexesNoHit = obstacles.Item2.Item2;
+                    Vector3 direction = GetDirectionToObstacle(indexesNoHit, Blue);
+
+                    blueTransform.position += direction * 0.05F;
+                    if (portalPlace != null) portalPlace.portal = Blue;
+                    Debug.DrawLine(Blue.transform.position + new Vector3(0, 0, Random.Range(-0.01f, 0.01f)),
+                        hit.point + blueTransform.forward * 0.1f + direction * 0.2F,
+                        new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)), 2);
+                }
+
+                if (!isAllObstacleBehind && i == 40)
+                {
+                    (blueTransform = Red.transform).rotation = lastRotation;
+                    blueTransform.position = lastPosition;
+                    Red.ColliderChecker.enabled = true;
+                }
+
+                Red.ColliderChecker.enabled = true;
             }
-            else
-            {
-                _portalShootSound.Play();
-                _BlueParticle.Play();
-            }
+
+            _RedParticle.Play();
+            _portalShootSound.Play();
         }
 
         _animation.Play();
@@ -74,35 +109,66 @@ public class PortalGun : MonoBehaviour
 
             Quaternion lastRotation = Red.transform.rotation;
             Vector3 lastPosition = Red.transform.position;
-
             Transform redTransform;
             (redTransform = Red.transform).rotation = Quaternion.LookRotation(hit.normal);
             redTransform.position = hit.point + redTransform.forward * 0.3f;
             OffPortalOnMove portalPlace = hit.collider.GetComponent<OffPortalOnMove>();
             if (portalPlace != null) portalPlace.portal = Red;
 
-            _corners = GetPortalCorners(Red);
-            Red.ColliderChecker.enabled = false;
-
-            var obstacles = IsAllObstacleBehind(Red);
-            bool isAllObstacleBehind = obstacles.Item1;
-
-            bool isObstacleForward = IsObstacleForward(Red);
-            // если что-то мешает, возвращаем назад
-            if (!isAllObstacleBehind || isObstacleForward)
+            for (int i = 0; i < 40; i++)
             {
-                (redTransform = Red.transform).rotation = lastRotation;
-                redTransform.position = lastPosition;
-                _RedParticle.Play();
-                _portalShootSound.Play();
-            }
-            else
-            {
-                _portalShootSound.Play();
-                _RedParticle.Play();
+                _corners = GetPortalCorners(Red);
+                Red.ColliderChecker.enabled = false;
+
+                var obstacles = IsAllObstacleBehind(Red);
+                bool isAllObstacleBehind = obstacles.Item1;
+                bool isObstacleForward = IsObstacleForward(Red);
+                if (obstacles.Item2.Item2.Length == 4)
+                {
+                    (redTransform = Red.transform).rotation = lastRotation;
+                    redTransform.position = lastPosition;
+                    Red.ColliderChecker.enabled = true;
+                    break;
+                }
+
+                if (isAllObstacleBehind && !isObstacleForward)
+                {
+                    break;
+                }
+
+                if (isObstacleForward) // спереди что-то есть => возвращаем назад
+                {
+                    (redTransform = Red.transform).rotation = lastRotation;
+                    redTransform.position = lastPosition;
+                    Red.ColliderChecker.enabled = true;
+                    break;
+                }
+
+                // взади чего-то нет && нет препятсвий спереди => двигаем
+                if (!isAllObstacleBehind && !isObstacleForward)
+                {
+                    int[] indexesNoHit = obstacles.Item2.Item2;
+                    Vector3 direction = GetDirectionToObstacle(indexesNoHit, Red);
+
+                    redTransform.position += direction * 0.05F;
+                    if (portalPlace != null) portalPlace.portal = Red;
+                    Debug.DrawLine(Red.transform.position + new Vector3(0, 0, Random.Range(-0.01f, 0.01f)),
+                        hit.point + redTransform.forward * 0.1f + direction * 0.2F,
+                        new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)), 2);
+                }
+
+                if (!isAllObstacleBehind && i == 40)
+                {
+                    (redTransform = Red.transform).rotation = lastRotation;
+                    redTransform.position = lastPosition;
+                    Red.ColliderChecker.enabled = true;
+                }
+
+                Red.ColliderChecker.enabled = true;
             }
 
-            Red.ColliderChecker.enabled = true;
+            _RedParticle.Play();
+            _portalShootSound.Play();
         }
 
         _animation.Play();
@@ -174,6 +240,14 @@ public class PortalGun : MonoBehaviour
                     var obstacles = IsAllObstacleBehind(Red);
                     bool isAllObstacleBehind = obstacles.Item1;
                     bool isObstacleForward = IsObstacleForward(Red);
+                    print($"{obstacles.Item2.Item2.Length}");
+                    if (obstacles.Item2.Item2.Length == 4)
+                    {
+                        redTransform.rotation = lastRotation;
+                        redTransform.position = lastPosition;
+                        Red.ColliderChecker.enabled = true;
+                        break;
+                    }
 
                     if (isAllObstacleBehind && !isObstacleForward)
                     {
@@ -182,7 +256,7 @@ public class PortalGun : MonoBehaviour
 
                     if (isObstacleForward) // спереди что-то есть => возвращаем назад
                     {
-                        (redTransform = Red.transform).rotation = lastRotation;
+                        redTransform .rotation = lastRotation;
                         redTransform.position = lastPosition;
                         Red.ColliderChecker.enabled = true;
                         break;
@@ -199,16 +273,11 @@ public class PortalGun : MonoBehaviour
                         Debug.DrawLine(Red.transform.position + new Vector3(0, 0, Random.Range(-0.01f, 0.01f)),
                             hit.point + redTransform.forward * 0.1f + direction * 0.2F,
                             new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)), 2);
-                        print($"{Red.transform.position} - " +
-                              $"{direction * 0.2F} - " +
-                              $"{Red.transform.position + direction * 0.2F}");
-                        //Debug.DrawLine(Red.transform.position, Red.transform.position + direction * 0.2F,
-                        //    new Color(0.3f, 0.71f, 1f), 7);
                     }
 
                     if (!isAllObstacleBehind && i == 40)
                     {
-                        (redTransform = Red.transform).rotation = lastRotation;
+                        redTransform.rotation = lastRotation;
                         redTransform.position = lastPosition;
                         Red.ColliderChecker.enabled = true;
                     }
@@ -216,43 +285,72 @@ public class PortalGun : MonoBehaviour
                     Red.ColliderChecker.enabled = true;
                 }
 
-                // else
-                // {
-                //     _RedParticle.Play();
-                // }
+                _RedParticle.Play();
             }
             else
             {
                 Quaternion lastRotation = Blue.transform.rotation;
                 Vector3 lastPosition = Blue.transform.position;
-
-                Transform blueTransform;
-                (blueTransform = Blue.transform).rotation = Quaternion.LookRotation(hit.normal);
-                blueTransform.position = hit.point + blueTransform.forward * 0.3f;
+                Transform redTransform;
+                (redTransform = Blue.transform).rotation = Quaternion.LookRotation(hit.normal);
+                redTransform.position = hit.point + redTransform.forward * 0.3f;
                 OffPortalOnMove portalPlace = hit.collider.GetComponent<OffPortalOnMove>();
                 if (portalPlace != null) portalPlace.portal = Blue;
 
-                _corners = GetPortalCorners(Blue);
-                Blue.ColliderChecker.enabled = false;
-
-                var obstacles = IsAllObstacleBehind(Blue);
-                bool isAllObstacleBehind = obstacles.Item1;
-                bool isObstacleForward = IsObstacleForward(Blue);
-                // если что-то мешает, возвращаем назад
-                if (!isAllObstacleBehind || isObstacleForward)
+                for (int i = 0; i < 40; i++)
                 {
-                    (blueTransform = Blue.transform).rotation = lastRotation;
-                    blueTransform.position = lastPosition;
-                    //_BlueParticle.Play();
-                    //portalPlace = hit.collider.GetComponent<OffPortalOnMove>();
-                    //if (portalPlace != null) portalPlace.portal = Blue;
-                }
-                else
-                {
-                    _BlueParticle.Play();
+                    _corners = GetPortalCorners(Blue);
+                    Blue.ColliderChecker.enabled = false;
+
+                    var obstacles = IsAllObstacleBehind(Blue);
+                    bool isAllObstacleBehind = obstacles.Item1;
+                    bool isObstacleForward = IsObstacleForward(Blue);
+
+                    if (obstacles.Item2.Item2.Length == 4)
+                    {
+                        (redTransform = Blue.transform).rotation = lastRotation;
+                        redTransform.position = lastPosition;
+                        Blue.ColliderChecker.enabled = true;
+                        break;
+                    }
+
+                    if (isAllObstacleBehind && !isObstacleForward)
+                    {
+                        break;
+                    }
+
+                    if (isObstacleForward) // спереди что-то есть => возвращаем назад
+                    {
+                        (redTransform = Blue.transform).rotation = lastRotation;
+                        redTransform.position = lastPosition;
+                        Blue.ColliderChecker.enabled = true;
+                        break;
+                    }
+
+                    // взади чего-то нет && нет препятсвий спереди => двигаем
+                    if (!isAllObstacleBehind && !isObstacleForward)
+                    {
+                        int[] indexesNoHit = obstacles.Item2.Item2;
+                        Vector3 direction = GetDirectionToObstacle(indexesNoHit, Blue);
+
+                        redTransform.position += direction * 0.05F;
+                        if (portalPlace != null) portalPlace.portal = Blue;
+                        Debug.DrawLine(Blue.transform.position + new Vector3(0, 0, Random.Range(-0.01f, 0.01f)),
+                            hit.point + redTransform.forward * 0.1f + direction * 0.2F,
+                            new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)), 2);
+                    }
+
+                    if (!isAllObstacleBehind && i == 40)
+                    {
+                        (redTransform = Blue.transform).rotation = lastRotation;
+                        redTransform.position = lastPosition;
+                        Blue.ColliderChecker.enabled = true;
+                    }
+
+                    Blue.ColliderChecker.enabled = true;
                 }
 
-                Blue.ColliderChecker.enabled = true;
+                _RedParticle.Play();
             }
 
             _portalShootSound.Play();
@@ -263,7 +361,6 @@ public class PortalGun : MonoBehaviour
 
     private Vector3 GetDirectionToObstacle(int[] indexesNoHits, Portal portal)
     {
-        print(indexesNoHits.Length);
         Transform portalPos = portal.transform;
 
         Vector3 direction = Vector3.zero;
@@ -273,7 +370,6 @@ public class PortalGun : MonoBehaviour
             {
                 if (!indexesNoHits.Contains(i))
                 {
-                    print($"{i} point");
                     direction = i switch
                     {
                         4 => portalPos.right + portalPos.up,

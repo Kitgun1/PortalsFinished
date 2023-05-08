@@ -7,20 +7,11 @@ public class Teleporter : MonoBehaviour
     public Teleporter Other;
     public bool IsTeleporting;
     public Transform TeleportPoint;
+    private PlayerControls _playerControls;
 
     private void Start()
     {
-
-    }
-
-    private void Update()
-    {
-
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        
+        _playerControls = FindObjectOfType<PlayerControls>();
     }
 
     private void Teleport(Transform obj)
@@ -30,19 +21,31 @@ public class Teleporter : MonoBehaviour
         //localPos = new Vector3(-localPos.x, localPos.y, -localPos.z);
         obj.position = Other.TeleportPoint.transform.localToWorldMatrix.MultiplyPoint3x4(localPos);
 
-        Rigidbody ct = obj.GetComponent<Rigidbody>();
-        float forceOut = Mathf.Abs(ct.velocity.y) < 3f ? 1f : obj.GetComponent<PlayerControls>().forceout;
-        Vector3 directionForce = Other.TeleportPoint.transform.forward * Mathf.Abs(ct.velocity.y) * forceOut;
-        directionForce = new Vector3(Mathf.Min(Mathf.Abs(directionForce.x), 35f) * Mathf.Sign(directionForce.x),
-            Mathf.Min(Mathf.Abs(directionForce.y), 35f) * Mathf.Sign(directionForce.y),
-            Mathf.Min(Mathf.Abs(directionForce.z), 35f) * Mathf.Sign(directionForce.z)
-            );
+        Rigidbody rigidbody = obj.GetComponent<Rigidbody>();
+        float velocity = rigidbody.velocity.y + rigidbody.velocity.x + rigidbody.velocity.z;
+        float forceOut = Mathf.Abs(velocity) < _playerControls.forceout
+            ? Mathf.Abs(velocity)
+            : _playerControls.forceout;
+        Vector3 directionForce = Other.TeleportPoint.transform.forward * Mathf.Abs(velocity) * forceOut;
+
+        directionForce = new Vector3(
+            Mathf.Min(Mathf.Abs(directionForce.x), 40f) * Mathf.Sign(directionForce.x),
+            Mathf.Min(Mathf.Abs(directionForce.y), 40f) * Mathf.Sign(directionForce.y),
+            Mathf.Min(Mathf.Abs(directionForce.z), 40f) * Mathf.Sign(directionForce.z)
+        );
 
         // Rotation
-        Quaternion difference = new Quaternion(0, Other.transform.rotation.y, 0, Other.transform.rotation.w) * Quaternion.Inverse(new Quaternion(0, transform.rotation.y, 0, transform.rotation.w) * Quaternion.Euler(0, 180, 0));
+        Quaternion difference = new Quaternion(0, Other.transform.rotation.y, 0, Other.transform.rotation.w) *
+                                Quaternion.Inverse(new Quaternion(0, transform.rotation.y, 0, transform.rotation.w) *
+                                                   Quaternion.Euler(0, 180, 0));
         obj.rotation = difference * obj.rotation;
 
-        ct.AddForce(directionForce, ForceMode.Impulse);
+        //_playerControls.Impulse = directionForce;
+        _playerControls.IsImpulse = true;
+        rigidbody //.velocity += directionForce / 2;
+            .AddForce(directionForce, ForceMode.Impulse);
+        
+        //print($"{directionForce} ~ { Other.TeleportPoint.transform.forward} * {Mathf.Abs(velocity).ToString("F2")} * {forceOut.ToString("F2")}");
 
         Turret turret = obj.GetComponent<Turret>();
         if (turret != null)
@@ -64,11 +67,6 @@ public class Teleporter : MonoBehaviour
             Teleport(other.transform);
             StartCoroutine(OnExit());
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        
     }
 
     private IEnumerator OnExit()

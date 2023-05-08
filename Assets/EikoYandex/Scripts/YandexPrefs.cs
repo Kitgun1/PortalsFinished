@@ -46,7 +46,7 @@ namespace Eiko.YaSDK.Data
         public static void SetInt(string key, int value)
         {
             Debug.Log(key + " " + value);
-            prefs.SetInt(key, value);
+                //prefs.SetInt(key, value);
             if (param.IsAutorised)
             {
                 param.score[key] = value;
@@ -61,7 +61,7 @@ namespace Eiko.YaSDK.Data
         public static void SetString(string key, string value)
         {
             Debug.Log(key + " " + value);
-            prefs.SetString(key, value);
+            //prefs.SetString(key, value);
             if (param.IsAutorised)
             {
                 param.data[key] = value;
@@ -75,8 +75,8 @@ namespace Eiko.YaSDK.Data
 
         public static int GetInt(string key, int def = 0)
         {
-            //Debug.Log(key + " " + value);
-            return prefs.GetInt(key);
+            Debug.Log(key + " ~ " + prefs.GetInt(key, def));
+            return prefs.GetInt(key, def);
         }
 
         public static string GetString(string key, string def = "")
@@ -182,10 +182,10 @@ namespace Eiko.YaSDK.Data
 
         public int GetInt(string key, int def = 0)
         {
-            if (param.score.TryGetValue(key, out var value))
+            if (param.score.TryGetValue(key, out int value))
                 return value;
-            else
-                return def;
+            
+            return def;
         }
 
         public string GetString(string key, string def = "")

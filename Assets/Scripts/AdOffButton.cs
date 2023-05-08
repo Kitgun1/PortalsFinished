@@ -32,17 +32,15 @@ public class AdOffButton : MonoBehaviour
 
     private IEnumerator StartPurch()
     {
-        Debug.Log("000");
         var process = new PurchaseProcess();
         yield return process.InitPurchases();
-        Debug.Log("111");
         GetComponent<Button>().onClick.AddListener(Purchase);
     }
 
     public void Purchase()
     {
-        Debug.Log("12");
-        PurchaseProcess.instance.ProcessPurchase("1", () => {
+        PurchaseProcess.instance.ProcessPurchase("1", () =>
+        {
             YandexPrefs.SetInt("IsAd", 1);
             gameObject.SetActive(false);
         });

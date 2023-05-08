@@ -14,14 +14,7 @@ public class GunLoader : MonoBehaviour
         }
         else
         {
-            foreach (var item in _gunObjects)
-            {
-                if (!item.IsTaken)
-                {
-                    item.IsTaken = YandexPrefs.GetInt("GunTaken" + item.GunIndex, 0) == 0 ? false : true;
-                    item.AdWatching = YandexPrefs.GetInt("GunAdWatched" + item.GunIndex, 0);
-                }
-            }
+            Load(null);
         }
     }
 
@@ -31,7 +24,7 @@ public class GunLoader : MonoBehaviour
         {
             if (!item.IsTaken)
             {
-                item.IsTaken = YandexPrefs.GetInt("GunTaken" + item.GunIndex, 0) == 0 ? false : true;
+                item.IsTaken = YandexPrefs.GetInt("GunTaken" + item.GunIndex, 0) != 0;
                 item.AdWatching = YandexPrefs.GetInt("GunAdWatched" + item.GunIndex, 0);
             }
         }

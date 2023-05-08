@@ -12,20 +12,22 @@ public class RewardedPanel : MonoBehaviour
     {
         _icon.sprite = gunObject.sprite;
         _gunObject = gunObject;
-        
+
         _closeBtn.onClick.AddListener(finishLvl.SetLoadable);
         _closeBtn.onClick.AddListener(ClosePanel);
 
         YandexPrefs.SetInt("GunTaken" + _gunObject.GunIndex, 1);
+        
         _gunObject.IsTaken = true;
     }
 
     public void SetSkin()
     {
+        print("1");
         YandexPrefs.SetInt("ActiveGun", _gunObject.GunIndex);
     }
 
-    public void ClosePanel()
+    private void ClosePanel()
     {
         gameObject.SetActive(false);
     }

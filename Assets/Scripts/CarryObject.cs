@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CarryObject : MonoBehaviour
 {
+    [SerializeField] private float _timeToDespawn = -20;
     public bool IsCarring;
     public Transform ParentObject;
     private Rigidbody _rigidbody;
@@ -32,7 +33,7 @@ public class CarryObject : MonoBehaviour
             _time += Time.deltaTime;
             if (_time >= _delayCheck)
             {
-                if (transform.position.y < -10)
+                if (transform.position.y < _timeToDespawn)
                 {
                     ResetTransform();
                 }

@@ -51,7 +51,7 @@ MonoBehaviour:
   _player: {fileID: 0}
   _damage: 4
   _fireDelay: 1
-  _fireDistance: 0
+  _fireDistance: 11.28
   _fire: {fileID: 0}
   _explosion: {fileID: 0}
   _turretType: 0
@@ -170,7 +170,7 @@ MonoBehaviour:
   _secondObject: {fileID: 0}
   _light1: {fileID: 5113871909559558075}
   _light2: {fileID: 4811588430988175366}
-  _countToActive: 0
+  _countToActive: 1
 --- !u!1 &4811588430988175366
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b17f85258053841a3bbcbaceec07c50d, type: 3}
-  m_Name: PPSH
+  m_Name: Assault
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 947f27c61868c48e7ad8ef1308f2e06e, type: 3}
-  GunIndex: 1
-  IsTaken: 1
+  sprite: {fileID: 21300000, guid: 845e3ebfa673e4c62a514049ad0cd9f7, type: 3}
+  GunIndex: 8
+  IsTaken: 0
   AdWatching: 0
-  AdToTake: 0
+  AdToTake: 1

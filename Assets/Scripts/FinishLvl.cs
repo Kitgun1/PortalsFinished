@@ -69,16 +69,16 @@ public class FinishLvl : MonoBehaviour
         if (_isRewardedLvl && !gunObject.IsTaken && gunObject != null)
         {
             rewardedPanel.gameObject.SetActive(true);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
             rewardedPanel.OpenPanel(gunObject, this);
             yield return new WaitUntil(() => _canLoadLvl == true);
         }
 
-        print("CloseLvl");
         LvlTransition.Instance.CloseLvl();
 
         yield return new WaitForSeconds(1.5f);
         
-        print("1111");
         if (SceneManager.sceneCountInBuildSettings == SceneManager.GetActiveScene().buildIndex + 1)
         {
             SceneManager.LoadScene(0);

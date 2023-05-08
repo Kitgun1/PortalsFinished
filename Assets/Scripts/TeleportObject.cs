@@ -24,7 +24,7 @@ public class TeleportObject : MonoBehaviour, ITeleportable
 
     private IEnumerator onExit()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(.2f);
 
         _isTeleported = false;
     }

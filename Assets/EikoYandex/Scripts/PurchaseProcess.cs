@@ -10,18 +10,23 @@ public class PurchaseProcess
     public List<Purchase> purchases;
     private string signature;
     public bool isIint = true;
+
     public PurchaseProcess()
     {
         instance = this;
     }
+
     private WaitPurchizeInit ini;
+
     public WaitPurchizeInit InitPurchases()
     {
         YandexSDK.instance.onPurchaseSuccess += Instance_onPurchaseSuccess;
         YandexSDK.instance.GettedPurchase += Instance_GettedPurchase;
-        YandexSDK.instance.GettedPurchaseFail += Instance_GettedPurchaseFail; ;
+        YandexSDK.instance.GettedPurchaseFail += Instance_GettedPurchaseFail;
+        ;
         YandexSDK.instance.onPurchaseInitialize += Instance_onPurchaseInitialize;
-        YandexSDK.instance.onPurchaseFailed += Instance_onPurchaseFailed; ;
+        YandexSDK.instance.onPurchaseFailed += Instance_onPurchaseFailed;
+        ;
         ini = new WaitPurchizeInit();
         YandexSDK.instance.InitializePurchases();
         return ini;
@@ -52,16 +57,17 @@ public class PurchaseProcess
         signature = obj.signature;
         ini.EndWait(true);
     }
-    private Action successAction;
-    public void ProcessPurchase(string id, Action action=null)
-    {
 
+    private Action successAction;
+
+    public void ProcessPurchase(string id, Action action = null)
+    {
         successAction = action;
         YandexSDK.instance.ProcessPurchase(id);
     }
+
     private void Instance_onPurchaseSuccess(Purchase obj)
     {
-        
         purchases.Add(obj);
         successAction?.Invoke();
     }
@@ -69,22 +75,25 @@ public class PurchaseProcess
     private void GetPurchases()
     {
         YandexSDK.instance.TryGetPurchases();
-
     }
+
     public static bool Has(string id)
     {
-        return null != instance.purchases.FirstOrDefault(x=>x.productID==id);
+        return null != instance.purchases.FirstOrDefault(x => x.productID == id);
     }
 }
+
 public class WaitPurchizeInit : CustomYieldInstruction
 {
     public bool Result { get; private set; }
     private bool _keepWaiting = true;
+
     public void EndWait(bool Result)
     {
         Debug.Log("EndWait");
         _keepWaiting = false;
         this.Result = Result;
     }
-    public override bool keepWaiting =>_keepWaiting;
+
+    public override bool keepWaiting => _keepWaiting;
 }

@@ -19,38 +19,43 @@ public class YandexSettings : EditorWindow
     static void Init()
     {
         YandexSettings window = (YandexSettings)EditorWindow.GetWindow(typeof(YandexSettings));
-        if(EditorPrefs.HasKey(nameof(YandexSettings)))
+        if (EditorPrefs.HasKey(nameof(YandexSettings)))
         {
             window.wraper = JsonUtility.FromJson<YandexSettingsWraper>(
-                    EditorPrefs.GetString(nameof(YandexSettings)));
+                EditorPrefs.GetString(nameof(YandexSettings)));
         }
         else
         {
             window.wraper = new YandexSettingsWraper();
         }
+
         window.Show();
     }
+
     private void OnDisable()
     {
         EditorPrefs.SetString(
-            nameof(YandexSettings), 
+            nameof(YandexSettings),
             JsonUtility.ToJson(wraper)
-            );
+        );
     }
+
     private void OnGUI()
     {
-        if(wraper==null)
+        if (wraper == null)
         {
-            Debug.Log("aaa");   
+            Debug.Log("aaa");
         }
+
         wraper.mode = (DisplayMode)EditorGUILayout.EnumPopup("DisplayMode", wraper.mode);
     }
+
     [PostProcessBuild(1)]
     public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
     {
-        if(target == BuildTarget.WebGL)
+        if (target == BuildTarget.WebGL)
         {
-            YandexSettingsWraper YA =  JsonUtility.FromJson<YandexSettingsWraper>(
+            YandexSettingsWraper YA = JsonUtility.FromJson<YandexSettingsWraper>(
                 EditorPrefs.GetString(nameof(YandexSettings)));
 
             var pathToCss = Path.Combine(pathToBuiltProject, CssPath);
@@ -61,7 +66,7 @@ public class YandexSettings : EditorWindow
                 str = reader.ReadToEnd();
             }
 
-            str = str.Replace(ReplaceTag, YA.mode == DisplayMode.Portrait? Portrait : lanscape);
+            str = str.Replace(ReplaceTag, YA.mode == DisplayMode.Portrait ? Portrait : lanscape);
 
             using (StreamWriter file = new StreamWriter(pathToCss))
             {
@@ -70,11 +75,13 @@ public class YandexSettings : EditorWindow
         }
     }
 }
+
 [Serializable]
 public class YandexSettingsWraper
 {
     public DisplayMode mode = DisplayMode.Landscape;
 }
+
 [Serializable]
 public enum DisplayMode
 {

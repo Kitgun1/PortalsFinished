@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b17f85258053841a3bbcbaceec07c50d, type: 3}
-  m_Name: SiFi1
+  m_Script: {fileID: 11500000, guid: d4a7f1e73ecf4357875eb914d5068252, type: 3}
+  m_Name: "Pr\xEDvesok"
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: ac316c4ef2b5643758f7c76a00ac00bb, type: 3}
-  GunIndex: 2
+  Sprite: {fileID: 21300000, guid: 9ff4a61d833706f49a1a876ebebd1584, type: 3}
+  BibelotIndex: 3
   IsTaken: 0
-  AdWatching: 0
-  AdToTake: 1
+  Janov: 2

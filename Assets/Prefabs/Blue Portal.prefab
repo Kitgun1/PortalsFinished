@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2176779309003974925
 Transform:
   m_ObjectHideFlags: 0
@@ -43,7 +43,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.97, y: 7.42, z: 0.32}
+  m_Size: {x: 1.73, y: 7.42, z: 0.08}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &826493346990982953
 GameObject:
@@ -61,7 +61,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5846093759867660272
 Transform:
   m_ObjectHideFlags: 0
@@ -88,7 +88,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4, y: 3.23, z: 0.32}
+  m_Size: {x: 4, y: 2.99, z: 0.08}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6163359347840977666
 GameObject:
@@ -148,7 +148,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 1000
+  far clip plane: 300
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -5121,7 +5121,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6163359349110958101}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.05}
+  m_LocalPosition: {x: 0, y: 0, z: 0.54121363}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9965,6 +9965,7 @@ GameObject:
   - component: {fileID: 6163359349190138468}
   - component: {fileID: 6163359349190138470}
   - component: {fileID: 6163359349190138471}
+  - component: {fileID: 7709079598529549192}
   m_Layer: 0
   m_Name: Blue Portal
   m_TagString: Untagged
@@ -10011,7 +10012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04faa257e441a4ac6a25c9c06409280b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ColliderChecker: {fileID: 6163359349190138471}
+  ColliderChecker: {fileID: 7709079598529549192}
   Other: {fileID: 0}
   PortalView: {fileID: 6163359347840977670}
 --- !u!114 &6163359349190138470
@@ -10040,8 +10041,21 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 3.5629942, z: 0.1624726}
-  m_Center: {x: 0, y: 0.00000043753278, z: -0.2459409}
+  m_Size: {x: 1.6899999, y: 3.17, z: 1.0192316}
+  m_Center: {x: -0.0025218294, y: -0.00378794, z: 0.22}
+--- !u!65 &7709079598529549192
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6163359349190138469}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.8488939, y: 3.2319593, z: 0.067665264}
+  m_Center: {x: -0.0025218294, y: -0.00378794, z: -0.41046456}
 --- !u!1 &6163359349228471040
 GameObject:
   m_ObjectHideFlags: 0

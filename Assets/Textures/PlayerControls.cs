@@ -30,6 +30,11 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     [SerializeField] private GameObject _menuPopUp;
     [SerializeField] private Animator _animator;
 
+    [HideInInspector] public bool IsImpulse = false;
+
+
+    private float _time = 0;
+
     public Animator Animator
     {
         set => _animator = value;
@@ -325,7 +330,6 @@ public class PlayerControls : MonoBehaviour, ITeleportable
     {
         float moveHorizontal = 0, moveVertical = 0;
 
-
         if (IsMobile)
         {
             if (!_canvas._collider.bounds.Contains(Input.mousePosition))
@@ -355,12 +359,29 @@ public class PlayerControls : MonoBehaviour, ITeleportable
 
         movement = transform.TransformDirection(movement);
 
-        if (Mathf.Abs(_rigidbody.velocity.x) >= MaxSpeed || Mathf.Abs(_rigidbody.velocity.z) >= MaxSpeed) return;
+        //if (Mathf.Abs(_rigidbody.velocity.x) > MaxSpeed || Mathf.Abs(_rigidbody.velocity.z) > MaxSpeed) return;
+        if (Mathf.Abs(_rigidbody.velocity.x) < MaxSpeed &&
+            Mathf.Abs(_rigidbody.velocity.y) < MaxSpeed &&
+            Mathf.Abs(_rigidbody.velocity.z) < MaxSpeed)
+        {
+            IsImpulse = false;
+        }
 
-        //_rigidbody.AddForce(movement * speed, ForceMode.Force);
-        _rigidbody.velocity =
-            transform.TransformDirection(new Vector3(moveHorizontal * speed, _rigidbody.velocity.y,
-                moveVertical * speed));
+        if (IsImpulse) return;
+//        print($"{Mathf.Abs(_rigidbody.velocity.x + _rigidbody.velocity.z)} ~ {speed * 2 + speed / 2}");
+        if (Mathf.Abs(movement.x * speed) < speed - speed / 10 ||
+            Mathf.Abs(movement.y * speed) < speed - speed / 10 ||
+            Mathf.Abs(movement.z * speed) < speed - speed / 10)
+        {
+            _rigidbody.velocity = new Vector3(movement.x * speed, _rigidbody.velocity.y, movement.z * speed);
+        }
+        else
+        {
+            _rigidbody.AddForce(movement * speed, ForceMode.Force);
+        }
+        //rigidbody.velocity =
+        //   transform.TransformDirection(new Vector3(moveHorizontal * speed, _rigidbody.velocity.y,
+        //   moveVertical * speed)) + _impulseTemp;
     }
 
     private void JumpLogic()
