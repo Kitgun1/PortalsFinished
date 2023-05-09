@@ -11,14 +11,6 @@ namespace EikoYandex.Scripts
         private IEnumerator Start()
         {
             yield return YandexSDK.instance.InitDataPrefs();
-
-            PlayerPrefs.DeleteKey("ActiveGun");
-            PlayerPrefs.DeleteKey("ActiveBibelot");
-            for (int i = 0; i < 15; i++)
-            {
-                PlayerPrefs.DeleteKey("GunTaken" + i);
-                PlayerPrefs.DeleteKey("BibelotTaken" + i);
-            }
         }
     }
 }
