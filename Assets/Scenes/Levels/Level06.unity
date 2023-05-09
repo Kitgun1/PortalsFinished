@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.4964124, b: 0.574817, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1346,8 +1346,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1263445992}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.5000005, z: -4.4999995}
-  m_LocalScale: {x: 10, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 5.5000005, z: -4.03}
+  m_LocalScale: {x: 10, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 154105053}
@@ -2016,6 +2016,16 @@ PrefabInstance:
       propertyPath: Other
       value: 
       objectReference: {fileID: 1586743975}
+    - target: {fileID: 6163359349190138471, guid: 6fdb0d80c911f4629a46fe855122d465,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.14779627
+      objectReference: {fileID: 0}
+    - target: {fileID: 6163359349190138471, guid: 6fdb0d80c911f4629a46fe855122d465,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.21571739
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fdb0d80c911f4629a46fe855122d465, type: 3}
 --- !u!114 &1540804082 stripped
@@ -2184,6 +2194,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 306912963422942205, guid: 298cf5402b4a44ca29b9ee722ae17d77,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.19489717
+      objectReference: {fileID: 0}
+    - target: {fileID: 306912963422942205, guid: 298cf5402b4a44ca29b9ee722ae17d77,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.24755032
+      objectReference: {fileID: 0}
     - target: {fileID: 8916111060400900711, guid: 298cf5402b4a44ca29b9ee722ae17d77,
         type: 3}
       propertyPath: m_RootOrder
